@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Tree Example</title>
+
+    <style>
+	
+	.node {
+		cursor: pointer;
+	}
+
+	.node circle {
+	  fill: #fff;
+	  stroke: steelblue;
+	  stroke-width: 3px;
+	}
+
+	.node text {
+	  font: 12px sans-serif;
+	}
+
+	.link {
+	  fill: none;
+	  stroke: #ccc;
+	  stroke-width: 2px;
+	}
+	
+	div{
+		text-align: center;
+	}
+
+	.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.button1 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #4CAF50;
+}
+
+.button1:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.button2 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #008CBA;
+}
+
+.button2:hover {
+  background-color: #008CBA;
+  color: white;
+}
+
+.button3 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #f44336;
+}
+
+.button3:hover {
+  background-color: #f44336;
+  color: white;
+}
+
+.button4 {
+  background-color: white;
+  color: black;
+  border: 2px solid #e7e7e7;
+}
+
+.button4:hover {background-color: #e7e7e7;}
+
+.button5 {
+  background-color: white;
+  color: black;
+  border: 2px solid #555555;
+}
+
+.button5:hover {
+  background-color: #555555;
+  color: white;
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+    </style>
+
+  </head>
+
+  <body>
+  	<div>
+
+</div>
+<!-- load the d3.js library -->	
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+<!-- load scripts for discourse parsing tree -->
+<link href="Rhetorical%20Parser%20Interface_files/interactive_tree.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="Rhetorical%20Parser%20Interface_files/d3.js"></script>
+<script type="text/javascript" src="Rhetorical%20Parser%20Interface_files/d%3%02.js"></script>
+<script src="Rhetorical%20Parser%20Interface_files/jquery.js"></script>
+
+<!-- First stage section - Original Text -->
+<div><button class="button button5" onclick="show_text_box('first_stage')"> Original Text </button></div>
+<div id='first_stage'>
+	<textarea id="original_text" rows="8" cols="150">%original_text%</textarea>	
+</div>
+
+<!-- Second stage section - Original Text -->
+<div><button class="button button5" onclick="show_text_box('second_stage')"> Processed XML Text </button></div>
+<div id='second_stage'>
+	<textarea id="xml_processed_text" rows="8" cols="150">%xml_processed_text%</textarea>	
+</div>
+
+<!-- Third stage section - Displaying all the sections trees -->
+<div><button class="button button5" onclick="show_text_box('third-stage')"> Discourse Trees </button></div>
+<div id='third-stage'>
+	<!-- Discourse tree -->
+	<!-- First line buttons def: id=> _0 - hide _1 - show A - text B - nucleus text  -->
+	<div><button id='%0%' class="button button2" onclick="change_data('0_A')"> Other </button>   <button id='%1%' class="button button2" onclick="change_data('1_A')"> Chairmans Statement </button>  <button id='%2%' class="button button2" onclick="change_data('2_A')"> chief executive officer ceo review </button>   <button id='%3%' class="button button2" onclick="change_data('3_A')"> chief executive officer ceo report </button>   <button id='%4%' class="button button2" onclick="change_data('4_A')"> Governance Statement </button>  <button id='%5%' class="button button2" onclick="change_data('5_A')"> Remuneration Report </button>   <button id='%6%' class="button button2" onclick="change_data('6_A')"> Business review </button>   <button id='%7%' class="button button2" onclick="change_data('7_A')"> Financial Review</button>   <button id='%8%' class="button button2" onclick="change_data('8_A')"> Operating Review</button>   <button id='%9%' class="button button2" onclick="change_data('9_A')"> Highlights</button>   <button id='%10%' class="button button2" onclick="change_data('10_A')"> Auditors Report</button>   <button id='%11%' class="button button2" onclick="change_data('11_A')"> Risk Management</button>   <button id='%12%' class="button button2" onclick="change_data('12_A')"> charimans governance introduction</button>   <button id='%13%' class="button button2" onclick="change_data('13_A')"> corporate social responsibility CSR disclosures</button></div>
+
+	<div><button id='%00%' class="button button3" onclick="change_data('00_B')"> Other </button>   <button id='%01%' class="button button3" onclick="change_data('01_B')"> Chairmans Statement </button>  <button id='%02%' class="button button3" onclick="change_data('02_B')"> chief executive officer ceo review </button>   <button id='%03%' class="button button3" onclick="change_data('03_B')"> chief executive officer ceo report </button>   <button id='%04%' class="button button3" onclick="change_data('04_B')"> Governance Statement </button>  <button id='%05%' class="button button3" onclick="change_data('05_B')"> Remuneration Report </button>   <button id='%06%' class="button button3" onclick="change_data('6_B')"> Business review </button>   <button id='%07%' class="button button3" onclick="change_data('7_B')"> Financial Review</button>   <button id='%08%' class="button button3" onclick="change_data('8_B')"> Operating Review</button>   <button id='%09%' class="button button3" onclick="change_data('9_B')"> Highlights</button>   <button id='%010%' class="button button3" onclick="change_data('010_B')"> Auditors Report</button>   <button id='%011%' class="button button3" onclick="change_data('011_B')"> Risk Management</button>   <button id='%012%' class="button button3" onclick="change_data('012_B')"> charimans governance introduction</button>   <button id='%013%' class="button button3" onclick="change_data('013_B')"> corporate social responsibility CSR disclosures</button></div>
+
+	<!--<div><button id='%00%' class="button button3" onclick="change_data('00_A')"> Other Topics</button>   <button id='11_1' class="button button3" onclick="change_data('Financial Review Topics')"> Chairmans Statement Topics </button></div>-->
+	<div id='section'>
+		<table id='discourse-table' align='center'>
+			<tr>
+				<td><div id="chart"></div></td>
+				<td><div id="content"></div></td>
+			</tr>
+		</table>
+		
+	<script type="text/javascript">
+
+			// Discourse tree buttons show on off & update data
+			var section_buttons = document.getElementsByClassName('button button2');
+			var i;
+			for (i = 0; i < section_buttons.length; i++) 
+			{
+			  button_show(section_buttons[i].id);
+			} 
+
+			var section_buttons_topics = document.getElementsByClassName('button button3');
+			var i;
+			for (i = 0; i < section_buttons_topics.length; i++) 
+			{
+			  button_show(section_buttons_topics[i].id);
+			} 
+
+			function button_show(id_name)
+			{
+				var onOff = id_name.split("_")[1];
+				if (onOff == '0')
+				{
+					document.getElementById(id_name).style.display = 'none';
+				}
+				if (onOff == '3')
+				{
+					var test = document.getElementById(id_name).className + ' disabled';
+					document.getElementById(id_name).className = test;
+					document.getElementById(id_name).disabled = true;
+				}
+			}
+
+			function change_data(text)
+			{
+				debugger;
+				var guide = text.split("_");
+				var section_name = guide[0];
+				var text_type = guide[1];
+
+				switch (text_type)
+				{
+					case 'A':
+								switch(section_name)
+								{
+									//Other section
+									case '0': rhetoricParsingOutput = '%other_text%';
+									break;
+									//chairmans_statement section
+									case '1': rhetoricParsingOutput = '%chairmans_statement_text%';
+									break;
+									//chief_executive_officer_ceo_review
+									case '2': rhetoricParsingOutput = '%chief_executive_officer_ceo_review_text%';
+									break;
+									//chief_executive_officer_ceo_report_section
+									case '3': rhetoricParsingOutput = '%chief_executive_officer_ceo_report_section_text%';
+									break;
+									//governance_statement section
+									case '4': rhetoricParsingOutput = '%governance_statement_text%';
+									break;
+									//remuneration_report section
+									case '5': rhetoricParsingOutput = '%remuneration_report_text%';
+									break;
+									//business_review section
+									case '6': rhetoricParsingOutput = '%business_review_text%';
+									break;
+									//financial_review section
+									case '7': rhetoricParsingOutput = '%financial_review_text%';
+									break;
+									//operating_review section
+									case '8': rhetoricParsingOutput = '%operating_review_text%';
+									break;
+									//highlights section
+									case '9': rhetoricParsingOutput = '%highlights_text%';
+									break;
+									//auditors_report section
+									case '10': rhetoricParsingOutput = '%auditors_report_text%';
+									break;
+									//risk_management section
+									case '11': rhetoricParsingOutput = '%risk_management_text%';
+									break;
+									//charimans_governance_introduction section
+									case '12': rhetoricParsingOutput = '%chairmans_governance_introduction_text%';
+									break;
+									//corporate_social_responsibility_csr_disclosures section
+									case '13': rhetoricParsingOutput = '%corporate_social_responsibility_csr_disclosures_text%';
+									break;
+								}
+								addtext();
+					break;
+					case 'B':
+								switch(section_name)
+								{
+									//Other section
+									case '00': json_processed = '%other_text_topic%';
+									break;
+									//chairmans_statement section
+									case '01': json_processed = '%chairmans_statement_text_topic%';
+									break;
+									//chief_executive_officer_ceo_review
+									case '02': json_processed = '%chief_executive_officer_ceo_review_text_topic%';
+									break;
+									//chief_executive_officer_ceo_report_section
+									case '03': json_processed = '%chief_executive_officer_ceo_report_section_text_topic%';
+									break;
+									//governance_statement section
+									case '04': json_processed = '%governance_statement_text_topic%';
+									break;
+									//remuneration_report section
+									case '05': json_processed = '%remuneration_report_text_topic%';
+									break;
+									//business_review section
+									case '06': json_processed = '%business_review_text_topic%';
+									break;
+									//financial_review section
+									case '07': json_processed = '%financial_review_text_topic%';
+									break;
+									//operating_review section
+									case '08': json_processed = '%operating_review_text_topic%';
+									break;
+									//highlights section
+									case '09': json_processed = '%highlights_text_topic%';
+									break;
+									//auditors_report section
+									case '010': json_processed = '%auditors_report_text_topic%';
+									break;
+									//risk_management section
+									case '011': json_processed = '%risk_management_text_topic%';
+									break;
+									//charimans_governance_introduction section
+									case '012': json_processed = '%charimans_governance_introduction_text_topic%';
+									break;
+									//corporate_social_responsibility_csr_disclosures section
+									case '013': json_processed = '%corporate_social_responsibility_csr_disclosures_text_topic%';
+									break;
+								}
+								addtext_json();
+
+					break;
+				}
+
+				
+			}
+			//////////////////////////////////////////////////
+			/* This function is activated when (input is entered and) the Create Tree button is clicked: 
+			it parses the json-format string created into an object which is used to make the tree */
+			var index = 0;
+			var searchterm = "";
+			var nucleus_selected = 0;
+			var satellite_selected = 1;
+			var nodenum = -1;
+			var currentjsonstring; 
+			var scrollison = 0;
+			rhetoricParsingOutput="";
+			json_processed="";
+			
+			function loadFile(o)
+                {
+
+                    var fr = new FileReader();
+                    fr.onload = function(e)
+                        {
+                            showDataFile(e, o);
+                        };
+                    fr.readAsText(o.files[0]);
+                }
+
+                function showDataFile(e, o)
+                {
+                    document.getElementById("data").innerText = e.target.result;
+					rhetoricParsingOutput = e.target.result;
+					addtext();
+                }
+			
+		 	//Topics functions
+		 	function loadFile_topics(o)
+			{
+				var fr = new FileReader();
+				fr.onload = function(e)
+					{
+						showDataFile_topics(e, o);
+					};
+				fr.readAsText(o.files[0]);
+			}
+
+			function showDataFile_topics(e, o)
+			{
+				document.getElementById("data_topics").innerText = e.target.result;
+				json_processed = e.target.result;
+				addtext_json();
+			}
+			
+			//Original functions
+			function help(){
+				alert(" The width in pixels can be changed by entering a value and clicking Change Width of Tree (px) (a few thousand is a good number). Likewise for the height.f you want to highlight nodes that contain a certain text, or are of a certain relation type, type the text or relation type into the rightmost text area and click the \"Search\" button.To un-highlight all nodes, clear the search box (i.e. the rightmost text area) and uncheck both checkboxes. By hovering the mouse over nodes in the tree, you can access the text on which they are based. The text will display inside a tooltip. Beside the tree, a summary is shown of the text on which the tree is based. The summary can be set to scroll to the most recently clicked node. 		The summary shows, with a solid border, which node was most recently clicked. Its ancestors, right down to the root, appear with a dotted border.");
+			}
+			function scrollon()
+			{
+				scrollison = 1;
+				document.getElementById("scrolloffradio").checked=false;
+			}
+			
+			function scrolloff()
+			{
+				scrollison = 0;
+				document.getElementById("scrollonradio").checked=false;
+			}
+			
+			function addtext() 
+			{
+				var tempinputstring = rhetoricParsingOutput;
+				var tempjsonstring = make_JSON_string(tempinputstring);
+				currentjsonstring = tempjsonstring;
+				var tempjson = JSON.parse(tempjsonstring);
+				make_tree(tempjson);
+				index=0;
+				da=parseNodes(JSON.parse('['+tempjsonstring+']'));	
+				if (document.getElementById("content").hasChildNodes())
+				{
+				document.getElementById("content").removeChild(document.getElementById("content").childNodes[0]);	
+				}
+				document.getElementById("content").appendChild(da);	
+				document.getElementById("content").scrollTop = 0;
+				$(removeborder(nodenum + 1));
+			}
+
+			function addtext_json() 
+			{
+				//var tempinputstring = rhetoricParsingOutput;
+				//var tempjsonstring = make_JSON_string(tempinputstring);
+				currentjsonstring = json_processed;
+				var tempjson = JSON.parse(json_processed);
+				make_tree(tempjson);
+				index=0;
+				da=parseNodes(JSON.parse('['+json_processed+']'));	
+				if (document.getElementById("content").hasChildNodes())
+				{
+				document.getElementById("content").removeChild(document.getElementById("content").childNodes[0]);	
+				}
+				document.getElementById("content").appendChild(da);	
+				document.getElementById("content").scrollTop = 0;
+				$(removeborder(nodenum + 1));
+			}
+			
+			function refreshtext()
+			{
+				var tempjson = JSON.parse(currentjsonstring);
+				make_tree(tempjson);
+				index=0;
+				da=parseNodes(JSON.parse('['+currentjsonstring+']'));	
+				if (document.getElementById("content").hasChildNodes())
+				{
+				document.getElementById("content").removeChild(document.getElementById("content").childNodes[0]);	
+				}
+				document.getElementById("content").appendChild(da);	
+
+			}
+
+			// This function is called to start the recursive read function off on the provided input, and feed the json string back to addtext 
+			function make_JSON_string(inputstring) 
+			{
+				var jsonstringoutput = "";
+				var remaining_input = inputstring.trim();
+				nodenum = -1;
+				jsonstringoutput += recursiveread(remaining_input);
+				return jsonstringoutput;
+			}
+			
+			// This function creates a tree-structured json-format string from the output of the rhetorical parser 
+			function recursiveread(inputstring) 
+			{
+				nodenum += 1;
+				var output = "\n{";
+
+				//Determine the types of the parent 
+				var spanloc = inputstring.indexOf("span");
+				var leafloc = inputstring.indexOf("leaf");
+				//This type determines if it's a root or not 
+				var type;
+				//This type (type2) determines if it's a span or a leaf 
+				var type2;
+				if ((spanloc != -1) && ((spanloc < leafloc) || (leafloc == -1))) 
+				{
+					type = inputstring.substring(1, spanloc - 1);
+
+					type = type.trim();
+					type2 = "span"; 
+
+				}
+				else if ((leafloc != -1) && ((spanloc > leafloc) || (spanloc == -1)))
+				{
+					type = inputstring.substring(1, leafloc - 1);
+					type = type.trim();
+					type2 = "leaf";
+
+				}
+
+				//Use parent type to determine what to do next 
+				if (type == "Root")
+				{
+
+					//Add name and 1 bracket of metatext to output 
+					var txt = inputstring.substring(inputstring.indexOf(type), inputstring.indexOf(")") + 1);
+					output += "\n\"name\" : \"" + nodenum + "ENDNODENUM" + txt + "\"";
+					output += ",\n\"children\" : \n[";
+					
+					//Call recursively on children 
+					//Set initial current location to just after root metatext 
+					var currentloc = inputstring.indexOf(")") + 1;
+					var parentcloseloc = find_closed_bracket(inputstring);
+					
+					//Find appropriate initial open location 
+					var childopenloc = (inputstring.substring(currentloc, parentcloseloc + 1)).indexOf("(") + currentloc;
+					var done = 0;
+					var count = 0;
+					//TODO: take into account quoted brackets? 
+					while (done != 1)
+					{
+
+						//Find and set childcloseloc 
+						var childcloseloc = find_closed_bracket(inputstring.substring(childopenloc, parentcloseloc + 1)) + childopenloc;
+						// Recursive call
+						var childjsondata = recursiveread(inputstring.substring(childopenloc, childcloseloc + 1));
+						if (count > 0) 
+						{
+							output += ",";
+						}
+						output += childjsondata;
+
+						//Set new currentloc to the location just after the closed bracket of the current child 
+						currentloc = childcloseloc + 1;
+						// Check if there are no more children of the parent 
+						if (((inputstring.substring(currentloc, parentcloseloc + 1)).indexOf("(")) == -1) 
+						{
+							done = 1;
+						}
+						else
+						{
+							//Set new childopenloc to the location of the next open bracket between the end of the current child's bracket and the end of the root's bracket
+							childopenloc = (inputstring.substring(currentloc, parentcloseloc + 1)).indexOf("(") + currentloc;
+						}
+
+						count++;
+					}
+					
+					output += "\n]";
+					
+				}
+				else if ((type == "Satellite") || (type == "Nucleus") || (type == "DUMMY"))
+				{
+
+					//Read name and 2 brackets of metatext to output (don't close quotation mark on name field yet - more text is to be added)
+					
+					//Decide what to do next on the basis of 2nd level type
+					if (type2 == "leaf")
+					{
+						var txt = inputstring.substring(inputstring.indexOf(type), (inputstring.substring(inputstring.indexOf(")") + 1, inputstring.length)).indexOf(")") + 2 + inputstring.indexOf(")"));
+						output += "\n\"name\" : \"" + nodenum + "ENDNODENUM" + txt;
+
+						var contained_text_startloc = inputstring.indexOf("text _!") + 7;
+						var contained_text_endloc = (inputstring.substring(contained_text_startloc, inputstring.length)).indexOf("_!") + contained_text_startloc;
+						var contained_text = inputstring.substring(contained_text_startloc, contained_text_endloc);
+						//Close quotation mark on name field
+
+						var text_to_be_added = " | Text: " + contained_text + " \"";
+						output += text_to_be_added;
+					}
+					else if (type2 == "span")
+					{
+						//Read name and 2 brackets of metatext to output 
+						var txt = inputstring.substring(inputstring.indexOf(type), (inputstring.substring(inputstring.indexOf(")") + 1, inputstring.length)).indexOf(")") + 2 + inputstring.indexOf(")"));
+						output += "\n\"name\" : \"" + nodenum + "ENDNODENUM" + txt + "\"";
+						output += ",\n\"children\" : \n[";
+						
+						//Call recursively on children 
+						//Set initial current location to just after 2nd bracket of metatext 
+						var currentloc = (inputstring.substring(inputstring.indexOf(")") + 1, inputstring.length)).indexOf(")") + 1 + inputstring.indexOf(")");
+
+						var parentcloseloc = find_closed_bracket(inputstring);
+						
+						//Find appropriate initial open location 
+						var childopenloc = (inputstring.substring(currentloc, parentcloseloc + 1)).indexOf("(") + currentloc;
+						//TODO: take into account quoted brackets? 
+						var done = 0;
+						var count = 0;
+						while (done != 1)
+						{
+							//Find and set childcloseloc 
+							var childcloseloc = find_closed_bracket(inputstring.substring(childopenloc, parentcloseloc + 1)) + childopenloc;
+
+							// Recursive call 
+							var childjsondata = recursiveread(inputstring.substring(childopenloc, childcloseloc + 1));
+							if (count > 0) 
+							{
+								output += ",";
+							}
+							output += childjsondata;
+
+							//Set new currentloc to the location just after the closed bracket of the current child 
+							currentloc = childcloseloc + 1;
+							// Check if there are no more children of the parent 
+							if (((inputstring.substring(currentloc, parentcloseloc + 1)).indexOf("(")) == -1) 
+							{
+								done = 1;
+							}
+							else
+							{
+								//Set new childopenloc to the location of the next open bracket between the end of the current child's bracket and the end of the root's bracket 
+								childopenloc = (inputstring.substring(currentloc, parentcloseloc + 1)).indexOf("(") + currentloc;
+							}
+
+							count++;
+						}
+						
+						output += "\n]";
+
+					}
+					
+				}
+				
+				output += "\n}";
+				return output;
+			}
+			
+			// This function returns the index of the closed-bracket that matches (i.e. closes) the first open-bracket found in the input
+			// TODO: make function work with quoted brackets?
+			function find_closed_bracket(input) 
+			{
+				// The number of open brackets not closed currently
+				bracket_count = 0;
+				// The location of the closed bracket of the first open bracket in the input, within the remaining input
+				location_of_closed = 0;
+				/* The amount of input discarded so far. Also, the value that needs to be added to any value that refers to a
+				 position within the remaining input, in order to obtain a position within the total input. */
+				var current_base_index = 0;
+				// The amount of input left to be considered
+				var remaining_input = input;
+				// This var is set to 1 to signal that no closed bracket has been found for the first open bracket in the input
+				var errorboolean = 0;
+				/* This var is set to 1 to signal that the first open bracket in the input has been found; 
+				 after this, the while loop will search for the matching closed bracket */
+				var first_open_bracket_found = 0;
+
+				while (true) 
+				{
+					var nextopen = remaining_input.indexOf("(");
+					var nextclosed = remaining_input.indexOf(")");
+					// If the next bracket is an open bracket: 
+					if ((nextopen < nextclosed) && (nextopen != -1) && (nextclosed != -1)) 
+					{
+						first_open_bracket_found = 1;
+						bracket_count++;
+						remaining_input = remaining_input.substring(nextopen + 1, remaining_input.length);
+						current_base_index += nextopen + 1;
+					} 
+					// If the next bracket is a closed bracket or there is no open bracket: 
+					else if (((nextopen > nextclosed) || (nextopen == -1)) && (nextclosed != -1)) 
+					{
+						// If we're in the active portion of the search for a closed bracket, because we've found the first open bracket: 
+						if (first_open_bracket_found) 
+						{
+							bracket_count--;
+							// If we've found the closed bracket that matches the first open bracket in the input: 
+							if (bracket_count == 0) 
+							{
+								location_of_closed = nextclosed;
+								break;
+							} 
+							// If we haven't found the result, we keep looking: 
+							else 
+							{
+								remaining_input = remaining_input.substring(nextclosed + 1, remaining_input.length);
+								current_base_index += nextclosed + 1;
+							}
+						} 
+						// If we haven't yet found the first open bracket: 
+						else 
+						{
+							remaining_input = remaining_input.substring(nextclosed + 1, remaining_input.length);
+							current_base_index += nextclosed + 1;
+						}
+
+					} 
+					else if (nextclosed == -1) 
+					{
+						errorboolean = 1;
+						break;
+					}
+				}
+
+				if (errorboolean == 0)
+					return (location_of_closed + current_base_index);
+				else
+					return "BADFORMATERROR";
+			}
+			
+			//////////////////////////////////////////////////
+
+			var w = 700, h = 1000, i = 0, duration = 500, root;
+			var tree = d3.layout.tree().size([h, w - 160]);
+			
+			var diagonal = d3.svg.diagonal().projection(function(d) {
+				return [d.y, d.x];
+			});
+
+			var vis = d3.select("#chart").append("svg:svg").attr("width", w).attr("height", h).attr("id", "svg-discourse-tree").append("svg:g").attr("transform", "translate(40,0)");
+
+			//////////////////////////////////////////////////
+			// If a change in width is signalled: 
+			function changewidth() 
+			{
+				// Get the value 
+				var newwidth = document.inputarea.widthtext.value;
+				// Set the new width to the value 
+				w = newwidth;
+				// Reset the tree dimensions 
+				tree = d3.layout.tree().size([h, w - 160]);
+				// Remove the old tree 
+				d3.select("svg").remove();
+				// Append the new tree 
+				vis = d3.select("#chart").append("svg:svg").attr("width", w).attr("height", h).append("svg:g").attr("transform", "translate(40,0)");
+				
+				refreshtext();
+			}
+			
+			// If a change in height is signalled: 
+			function changeheight() 
+			{
+				// Get the value 
+				var newheight = document.inputarea.heighttext.value;
+				// Set the new height to the value 
+				h = newheight;
+				// Reset the tree dimensions
+				tree = d3.layout.tree().size([h, w - 160]);
+				// Remove the old tree 
+				d3.select("svg").remove();
+				// Append the new tree 
+				vis = d3.select("#chart").append("svg:svg").attr("width", w).attr("height", h).append("svg:g").attr("transform", "translate(40,0)");
+				
+				refreshtext();
+			}
+			
+			// To search for a term: 
+			function search() 
+			{
+				// Set the search term
+				searchterm = document.inputarea.searchtext.value;
+				// Refresh the tree 
+				tree = d3.layout.tree().size([h, w - 160]);
+				// Remove the old tree 
+				d3.select("svg").remove();
+				// Append the new tree 
+				vis = d3.select("#chart").append("svg:svg").attr("width", w).attr("height", h).append("svg:g").attr("transform", "translate(40,0)");
+				
+				refreshtext(); 
+			}
+			
+			// To search for satellites: 
+			function satellite()
+			{
+				if (satellite_selected == 1) satellite_selected = 0;
+				else satellite_selected = 1;
+				// Refresh the tree 
+				tree = d3.layout.tree().size([h, w - 160]);
+				// Remove the old tree 
+				d3.select("svg").remove();
+				// Append the new tree 
+				vis = d3.select("#chart").append("svg:svg").attr("width", w).attr("height", h).append("svg:g").attr("transform", "translate(40,0)");
+				
+				refreshtext(); 
+			}
+			
+			// To search for nuclei: 
+			function nucleus()
+			{
+				if (nucleus_selected == 1) nucleus_selected = 0;
+				else nucleus_selected = 1;
+				// Refresh the tree 
+				tree = d3.layout.tree().size([h, w - 160]);
+				// Remove the old tree 
+				d3.select("svg").remove();
+				// Append the new tree 
+				vis = d3.select("#chart").append("svg:svg").attr("width", w).attr("height", h).append("svg:g").attr("transform", "translate(40,0)");
+				
+				refreshtext(); 
+			}
+			
+			//////////////////////////////////////////////////
+			
+			function make_tree(json) {
+				json.x0 = 800;
+				json.y0 = 0;
+				update( root = json);
+			}
+
+			function update(source) {
+
+				// Compute the new tree layout.
+				var nodes = tree.nodes(root).reverse();
+				// console.log(nodes)
+				// Update the nodes…
+				var node = vis.selectAll("g.node").data(nodes, function(d) {
+					return d.id || (d.id = ++i);
+				});
+
+				var nodeEnter = node.enter().append("svg:g").attr("class", "node").attr("transform", function(d) {
+					return "translate(" + source.y0 + "," + source.x0 + ")";
+				});
+				//.style("opacity", 1e-6);
+
+				// Enter any new nodes at the parent's previous position.
+
+				nodeEnter.append("svg:circle")
+				//.attr("class", "node")
+				//.attr("cx", function(d) { return source.x0; })
+				//.attr("cy", function(d) { return source.y0; })
+				.attr("r", 4.5).style("fill", function(d) {
+					return d._children ? "lightsteelblue" : "#fff";
+				}).on("click", click).append("title").text(function(d) {
+					// Uncomment to make tooltip only show text in case of leaf
+					/*if (d.name.indexOf("| Text: ") != -1) {return d.name.substring(d.name.indexOf("| Text: ") + 1, d.name.length);}
+					else {*/
+						return d.name.substring(d.name.indexOf("ENDNODENUM")+10,d.name.length);
+						/*}*/
+				});
+				//Text addition of color and topic numbers
+				nodeEnter.append('text')
+				.attr('dx', function(d){return -25})
+				.attr('fill','red')
+				.text(function(d){
+				if (d.name.indexOf("| Text: ") != -1  && d.name.indexOf("| Topic: ") != -1) {return " "+d.name.substring(d.name.indexOf("| Topic: ") + 8, d.name.length >20? d.name.indexOf("| Topic: ") + 25: d.name.length);}
+				});
+
+ 
+				// Comment out block to remove text next to nodes
+				nodeEnter.append("svg:text").attr("x", function(d) {
+					return d._children ? -8 : 8;
+				}).attr("y", 3)
+				//.attr("fill","#ccc")
+				//.attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
+				.text(function(d) {
+						if(d.children) {						
+							relation="";							
+							for(j=0;j<d.children.length;j++){
+								if(d.children[j].name.indexOf("rel2par ")>0){
+									tempStr=d.children[j].name.substring(d.children[j].name.indexOf("rel2par ")+8,d.children[j].name.length);
+									//alert(tempStr); 									
+									if(tempStr.indexOf("span")<0)
+										relation=tempStr.substring(0,tempStr.indexOf(")"))+" ";																	
+									//alert(relation+""+ d.children[j].name);
+								}
+							}
+							
+						//alert("Done"+ d.name+", "+relation);	
+							if(relation=="") alert("No relation found for"+d.name);
+							else return relation;
+						}
+					if (d.name.indexOf("| Text: ") != -1) {return " "+d.name.substring(d.name.indexOf("| Text: ") + 7, d.name.length >20? d.name.indexOf("| Text: ") + 25: d.name.length)+"...";}
+					else{ 
+						var str= " "+d.name.substring(d.name.indexOf("ENDNODENUM")+10,d.name.indexOf(" "));
+						str+="("+d.name.substring(d.name.lastIndexOf("(")+9,d.name.lastIndexOf(")")+1)
+						return str;
+						//return d.name.substring(d.name.indexOf("ENDNODENUM")+10,d.name.length);
+					
+					}
+				});
+
+
+				// Transition nodes to their new position.
+				nodeEnter.transition().duration(duration).attr("transform", function(d) {
+					return "translate(" + d.y + "," + d.x + ")";
+				}).style("opacity", 1).select("circle")
+				//.attr("cx", function(d) { return d.x; })
+				//.attr("cy", function(d) { return d.y; })
+				.style("fill", "lightsteelblue");
+
+				// Translates the nodes and colors them based on whether their children are shown
+				var nodeUpdate = node.transition().duration(duration).attr
+				(
+					"transform", function(d) 
+					{
+						return "translate(" + d.y + "," + d.x + ")";
+					}
+				).style("opacity", 1).select("circle").attr("r", 9).style("fill", function(d) {
+					var containedtext = d.name.substring(d.name.indexOf("ENDNODENUM")+10,d.name.length);
+					if (((containedtext.indexOf(searchterm) != -1) && (searchterm != "")) || (satellite_selected == 1 && containedtext.indexOf("Satellite") != -1) || (nucleus_selected == 1 && containedtext.indexOf("Nucleus") != -1))
+					{
+						return "rgb(241, 163, 64)";
+					}
+					else
+					{
+					 return d._children ? "blue" : "lightsteelblue"; 
+					}
+					 });
+				
+				// Makes sub-tree disappear
+				node.exit().transition().duration(duration).attr("transform", function(d) {
+					return "translate(" + source.y + "," + source.x + ")";
+				}).style("opacity", 1e-6).remove();
+				
+
+				
+				
+				
+				
+				/*
+				var nodeTransition = node.transition()
+				.duration(duration);
+
+				nodeTransition.select("circle")
+				.attr("cx", function(d) { return d.y; })
+				.attr("cy", function(d) { return d.x; })
+				.style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+
+				nodeTransition.select("text")
+				.attr("dx", function(d) { return d._children ? -8 : 8; })
+				.attr("dy", 3)
+				.style("fill", function(d) { return d._children ? "lightsteelblue" : "#5babfc"; });
+
+				// Transition exiting nodes to the parent's new position.
+				var nodeExit = node.exit();
+
+				nodeExit.select("circle").transition()
+				.duration(duration)
+				.attr("cx", function(d) { return source.y; })
+				.attr("cy", function(d) { return source.x; })
+				.remove();
+
+				nodeExit.select("text").transition()
+				.duration(duration)
+				.remove();
+				*/
+				// Update the links…
+				var link = vis.selectAll("path.link").data(tree.links(nodes), function(d) {
+					return d.target.id;
+				});
+
+				// Enter any new links at the parent's previous position.
+				link.enter().insert("svg:path", "g").attr("class", "link").attr("d", function(d) {
+					var o = {
+						x : source.x0,
+						y : source.y0
+					};
+					return diagonal({
+						source : o,
+						target : o
+					});
+				}).transition().duration(duration).attr("d", diagonal);
+
+				// Transition links to their new position.
+				link.transition().duration(duration).attr("d", diagonal);
+
+				// Transition exiting nodes to the parent's new position.
+				link.exit().transition().duration(duration).attr("d", function(d) {
+					var o = {
+						x : source.x,
+						y : source.y
+					};
+					return diagonal({
+						source : o,
+						target : o
+					});
+				}).remove();
+
+				// Stash the old positions for transition.
+				nodes.forEach(function(d) {
+					d.x0 = d.x;
+					d.y0 = d.y;
+				});
+			}
+
+			// Toggle children on click.
+			function click(d) {
+				if (d.children) {
+					d._children = d.children;
+					d.children = null;
+					$(removeborder(nodenum + 1));
+					$(createborder(d.name.substring(0, d.name.indexOf("ENDNODENUM"))));
+					borderparents(d.name.substring(0, d.name.indexOf("ENDNODENUM")), JSON.parse('['+currentjsonstring+']'));
+				} else {
+					d.children = d._children;
+					d._children = null;
+					$(removeborder(nodenum + 1));
+					$(createborder(d.name.substring(0, d.name.indexOf("ENDNODENUM"))));
+					borderparents(d.name.substring(0, d.name.indexOf("ENDNODENUM")), JSON.parse('['+currentjsonstring+']'));
+				}
+				update(d);
+				if (scrollison)
+				{
+					window.location = "#" + d.name.substring(0, d.name.indexOf("ENDNODENUM"));
+				}
+			}
+
+
+			d3.select(self.frameElement).style("height", "3000px");
+			
+			
+			
+////////////////// FOCUS WINDOW CODE //////////////////
+			
+			var first=1;
+			function parseNodes(nodes) { // takes a nodes array and turns it into a <ol>
+			    var ol = document.createElement("ul");
+				if(first==1)
+				{
+					ol.setAttribute('id','comments');
+				 
+					first=0;
+				}
+				else{
+					ol.setAttribute('class','children');
+				}
+			     for(var i=0; i<nodes.length; i++) {
+			         ol.appendChild(parseNode(nodes[i]));
+			    }	
+			    return ol;
+			}
+			
+			function parseNode(node) { // takes a node object and turns it into a <li>
+			    var li = document.createElement("LI");
+				li.setAttribute('id',index/*node.commentid*/);
+			 
+				/*var text="<div class=\"comment\" "+"id=\"div"+node.commentid+"\" style=\"border:"+"0px;\">"+"<p>"+
+								 node.title+  
+								"</p></div>";*/
+				var text="<div class=\"comment\""+"id=\"div"+index/*node.commentid */
+								+"\" style=\"border:"+"2px;\">"+
+								  					 
+								"<p>"+
+								node.name.substring(node.name.indexOf("ENDNODENUM")+10, node.name.length)+
+								"</p>"+
+								"</div>";	
+								index++;
+				// alert(text);
+			    li.innerHTML = text;
+			     
+			    if(node.children) li.appendChild(parseNodes(node.children));
+			    return li;
+			}
+			
+			function borderparents(nodenum, currentnodes)
+			{
+				//Go through each node in level
+				for (var i = 0; i < currentnodes.length; i++)
+				{
+					// If the sought node has been found among current nodes
+					if (currentnodes[i].name.substring(0, currentnodes[i].name.indexOf("ENDNODENUM")) == nodenum)
+					{
+						// Border the parents by returning a 1 to caller
+						return 1;
+					}
+				}
+				// Otherwise, call recursively on descendants of current nodes (if they have any)
+				for (var j = 0; j < currentnodes.length; j++)
+				{
+					if (currentnodes[j].children)
+					{
+						var result = borderparents(nodenum, currentnodes[j].children);
+						// If this node is a parent of the sought node
+						if (result == 1)
+						{
+							// Border this parent
+							createdottedborder(currentnodes[j].name.substring(0, currentnodes[j].name.indexOf("ENDNODENUM")));
+							// And border all its parents
+							return 1;
+						}
+					}
+				}
+				return 0;
+			}
+
+			function createborder(divnum) {
+				$("#div" + divnum).css("border", "4px solid");	
+			};
+			
+			function createdottedborder(divnum) {
+				$("#div" + divnum).css("border", "4px dotted");	
+			};
+			
+			function removeborder(numdivs) {
+				for (var i = 0; i < numdivs; i++)
+				{
+					$("#div" + i).css("border", "0px solid");	
+				}
+			};
+			
+			//Function to donwload currentjsongstring to text file if needed
+			function download() {
+			var pom = document.createElement('a');
+			pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(currentjsonstring));
+			pom.setAttribute('download', 'jsonString.txt');
+			
+			if (document.createEvent) {
+				var event = document.createEvent('MouseEvents');
+				event.initEvent('click', true, true);
+				pom.dispatchEvent(event);
+			}
+			else {
+				pom.click();
+			}
+			};
+
+		</script>
+	</div>
+</div>
+
+<!-- Final stage section -->
+<div><button class="button button5" onclick="show_item('final_stage')"> Final Stage Result </button></div>
+<div id='final_stage'>
+<script>
+
+function show_final_result()
+{
+
+	var treeData =  %final_stage_result%;
+
+// ************** Generate the tree diagram	 *****************
+var margin = {top: 20, right: 120, bottom: 20, left: 120},
+	width = 1250 - margin.right - margin.left,
+	height = 500 - margin.top - margin.bottom;
+	
+var i = 0,
+	duration = 750,
+	root;
+
+var tree = d3.layout.tree()
+	.size([height, width]);
+
+var diagonal = d3.svg.diagonal()
+	.projection(function(d) { return [d.y, d.x]; });
+
+var svg = d3.select("body").append("svg")
+	.attr("id", "final_stage_tree_svg")
+	.attr("width", width + margin.right + margin.left)
+	.attr("height", height + margin.top + margin.bottom)
+  .append("g")
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+root = treeData[0];
+root.x0 = height / 2;
+root.y0 = 0;
+
+update(root);
+
+d3.select(self.frameElement).style("height", "500px");
+
+function toggle_visible()
+{
+	var node = svg.selectAll("g.node")
+	.style("opacity", 0);
+}
+
+function update(source) {
+
+  // Compute the new tree layout.
+  var nodes = tree.nodes(root).reverse(),
+	  links = tree.links(nodes);
+
+  // Normalize for fixed-depth.
+  nodes.forEach(function(d) { d.y = d.depth * 180; });
+
+  // Update the nodes…
+  var node = svg.selectAll("g.node")
+	  .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+  // Enter any new nodes at the parent's previous position.
+  var nodeEnter = node.enter().append("g")
+	  .attr("class", "node")
+	  .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
+	  .on("click", click);
+
+  nodeEnter.append("circle")
+	  .attr("r", 1e-6)
+	  .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+
+  nodeEnter.append("text")
+	  .attr("x", function(d) { return d.children || (d._children && d._children.length) ? -13 : 13; })
+	  .attr("dy", ".35em")
+	  .attr("text-anchor", function(d) { return d.children || (d._children && d._children.length) ? "end" : "start"; })
+	  .text(function(d) { return d.name; })
+	  .style("fill-opacity", 1e-6);
+
+  // Transition nodes to their new position.
+  var nodeUpdate = node.transition()
+	  .duration(duration)
+	  .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+
+  nodeUpdate.select("circle")
+	  .attr("r", 10)
+	  .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+
+  nodeUpdate.select("text")
+	  .style("fill-opacity", 1);
+
+  // Transition exiting nodes to the parent's new position.
+  var nodeExit = node.exit().transition()
+	  .duration(duration)
+	  .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+	  .remove();
+
+  nodeExit.select("circle")
+	  .attr("r", 1e-6);
+
+  nodeExit.select("text")
+	  .style("fill-opacity", 1e-6);
+
+  // Update the links…
+  var link = svg.selectAll("path.link")
+	  .data(links, function(d) { return d.target.id; });
+
+  // Enter any new links at the parent's previous position.
+  link.enter().insert("path", "g")
+	  .attr("class", "link")
+	  .attr("d", function(d) {
+		var o = {x: source.x0, y: source.y0};
+		return diagonal({source: o, target: o});
+	  });
+
+  // Transition links to their new position.
+  link.transition()
+	  .duration(duration)
+	  .attr("d", diagonal);
+
+  // Transition exiting nodes to the parent's new position.
+  link.exit().transition()
+	  .duration(duration)
+	  .attr("d", function(d) {
+		var o = {x: source.x, y: source.y};
+		return diagonal({source: o, target: o});
+	  })
+	  .remove();
+
+  // Stash the old positions for transition.
+  nodes.forEach(function(d) {
+	d.x0 = d.x;
+	d.y0 = d.y;
+  });
+}
+
+// Toggle children on click.
+function click(d) {
+	console.log("clicked : " + d.id)
+  if (d.children) {
+	d._children = d.children;
+	d.children = null;
+  } else {
+	d.children = d._children;
+	d._children = null;
+	document.getElementById('node_text').value = d.name
+  }
+  update(d);
+}
+
+function click_all_nodes(d){
+	if ("undefined" === typeof(d.children))
+	{
+		return
+	}
+	if(d.children)
+	{
+		d.children.forEach(function(item)
+		{
+			click_all_nodes(item)
+		})
+	}
+	else
+	{
+		d._children.forEach(function(item)
+		{
+			click_all_nodes(item)
+		})
+	}
+	click(d)
+	return
+}
+click_all_nodes(treeData[0])  // to display just the root node
+}
+
+//Activate the final stage tree building and hide the results
+show_final_result();
+//Hide elemnts
+document.getElementById('first_stage').style.display = "none";
+document.getElementById('second_stage').style.display = "none";
+document.getElementById('final_stage').style.display = "none";
+document.getElementById("final_stage_tree_svg").style.display = "none";
+document.getElementById("third-stage").style.display = "none";
+//Other functions
+function show_text_box(divid)
+{
+	var x = document.getElementById(divid);
+	if (x.style.display === "none") {
+    x.style.display = "block";
+
+  } else {
+    x.style.display = "none";
+  }
+}
+function show_item(divId)
+{
+	var x = document.getElementById(divId);
+	var graph = document.getElementById("final_stage_tree_svg");
+	if (x.style.display === "none") {
+    x.style.display = "block";
+    graph.style.display = "block";
+
+  } else {
+    x.style.display = "none";
+    graph.style.display = "none";
+  }
+}
+</script>
+	<textarea id="node_text" rows="8" cols="150"></textarea>
+</div>
+  </body>
+</html>
