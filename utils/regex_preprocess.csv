@@ -1,5 +1,5 @@
 ID,Description,Regex,Example
-0,Site,(W:)*(www\.)*[A-Za-z0-9\s?]*\.[com|co.uk]+(/(.)*)*,"www.investorcentre.co.uk
+0,Site,(www\.|WWW\.)?[A-Za-z0-9-\s]+\.((com|co|uk|dr)\.?/?)+,"www.investorcentre.co.uk
 www.investorcentre.com
 W: iggroup.com
 W: www.citi.com/dr "

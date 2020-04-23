@@ -218,7 +218,7 @@ def loop_models():
 # region one file functions
 def loop_models_one_file(models_choice, **params):
     def loop_discourse_results_one_file(topic_number, fileId, mode='LDA',
-                                        discourse_output_dir='/home/tzvi/PycharmProjects/linuxDiscourse/src/Output'):
+                                        discourse_output_dir='/home/tzvi/PycharmProjects/linuxDiscourse/src/Output'):  # TODO: Change hard coded path
         results_dict = dict()
         for discourse_results in os.listdir(discourse_output_dir):
             # If the current file is a dir => continue

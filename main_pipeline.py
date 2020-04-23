@@ -37,18 +37,22 @@ Based on pre-trained LDA models.
 """
 
 
-def third_stage(file_id, models):
+def third_stage(file_id, models=None):
     from LDA_process import loop_models_one_file
-    loop_models_one_file(models,
-                         file_id=str(file_id),
-                         topic_4_model='gensim_models/4topics/lda_model_trained_4topics.model',
-                         topic_4_data_dir='gensim_files/4Topic',
-                         topic_6_model='gensim_models/6topics/lda_model_trained_6topics.model',
-                         topic_6_data_dir='gensim_files/6Topic',
-                         topic_10_model='gensim_models/10topics/lda_model_trained_10topics.model',
-                         topic_10_data_dir='gensim_files/10Topic',
-                         hdp_model='gensim_models/hdp_model.model'
-                         )
+    if isinstance(models, list):  # It means CLI MODE
+        models[1]["file_id"] = str(file_id)
+        loop_models_one_file(models[0], **models[1])  # 0 - Models, 1 - Topic Paths
+    else:
+        loop_models_one_file(models,
+                             file_id=str(file_id),
+                             topic_4_model='gensim_models/4topics/lda_model_trained_4topics.model',
+                             topic_4_data_dir='gensim_files/4Topic',
+                             topic_6_model='gensim_models/6topics/lda_model_trained_6topics.model',
+                             topic_6_data_dir='gensim_files/6Topic',
+                             topic_10_model='gensim_models/10topics/lda_model_trained_10topics.model',
+                             topic_10_data_dir='gensim_files/10Topic',
+                             hdp_model='gensim_models/hdp_model.model'
+                             )
 
 
 """

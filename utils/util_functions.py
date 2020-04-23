@@ -354,9 +354,22 @@ def correct_after_split(text, regex_rules):
     index_to_remove = list()
     for line_number in range(len(text)):
         text[line_number] = text[line_number].strip()
+        test_var = text[line_number].lower()
+        test_var = re.sub(r'[0-9]{4}', 'date', test_var)
+        if 'date' in test_var and word_number_ratio(test_var) is True:
+            continue
         if text[line_number].endswith('.') and text[line_number].replace('.', '').isdigit() is True:
             index_to_remove.append(line_number)
-        if not len(text[line_number]):
+        elif word_number_ratio(text[line_number]) is False and '%' not in text[line_number]:
+            test_var = re.sub(regex_rules[7], 'date', test_var)
+            test_var = re.sub(regex_rules[8], 'date', test_var)
+            test_var = re.sub(regex_rules[16], 'date', test_var)
+            if 'date' in test_var and word_number_ratio(test_var) is True:
+                continue
+            index_to_remove.append(line_number)
+        elif text[line_number] == '.':
+            index_to_remove.append(line_number)
+        elif not len(text[line_number]):
             index_to_remove.append(line_number)
         elif text[line_number].isdigit():
             index_to_remove.append(line_number)
