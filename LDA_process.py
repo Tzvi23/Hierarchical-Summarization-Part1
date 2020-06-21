@@ -219,7 +219,7 @@ def loop_models():
 def loop_models_one_file(models_choice, **params):
     def loop_discourse_results_one_file(topic_number, fileId, mode='LDA',
                                         discourse_output_dir='/home/tzvi/PycharmProjects/linuxDiscourse/src/Output'):  # TODO: Change hard coded path
-        results_dict = dict()
+        results_dict = dict()  # each file processed and list of all the topics detected
         for discourse_results in os.listdir(discourse_output_dir):
             # If the current file is a dir => continue
             if os.path.isdir(os.path.join(discourse_output_dir, discourse_results)):
@@ -255,6 +255,7 @@ def loop_models_one_file(models_choice, **params):
     topic_10_data_dir = params['topic_10_data_dir']
     hdp_model = params['hdp_model']
 
+    classifier.clear_variables()
     if models_choice['4'] is True:
         # 4 topics model
         classifier.load_Model_local(topic_4_model)

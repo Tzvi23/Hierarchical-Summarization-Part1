@@ -90,8 +90,9 @@ def show_case(file_id, model_number):
                                   )
     return show_case_url
 
-# first_stage('data/130.txt')
-# second_stage('130.txt.xml')
-# third_stage(130)
-# fourth_stage(130)
-# show_case(130, 10)
+
+# first_stage('data/28695.txt')
+# second_stage('2326.txt.xml')
+# third_stage(92, {'4': True, '6': False, '10': False, 'hdp': False})
+fourth_stage(28080, '4')
+show_case(28080, 4)

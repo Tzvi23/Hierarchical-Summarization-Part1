@@ -106,9 +106,25 @@ def init_section_structure():
     }
     return sections
 
+section_types = {
+        0: 'other',
+        1: 'chairmans statement',
+        2: 'chief executive officer ceo review',
+        3: 'chief executive officer ceo report',
+        4: 'governance statement',
+        5: 'remuneration report',
+        6: 'business review',
+        7: 'financial review',
+        8: 'operating review',
+        9: 'highlights',
+        10: 'auditors report',
+        11: 'risk management',
+        12: 'chairmans governance introduction',
+        13: 'Corporate Social Responsibility CSR disclosures'
+    }
 
 def check_if_section(test_string, threshold=0.4):
-    section_types = init_section_structure()  # TODO: initialize the variable once (memory consumption)
+    # section_types = init_section_structure()  # TODO: initialize the variable once (memory consumption)
     ans = [0] * len(section_types)
     for _ in range(len(section_types)):
         ans[_] = get_jaccard_sim(test_string, section_types[_])
@@ -202,6 +218,9 @@ def check_if_header(item):
     if first_upper_letter_words_flag is True:
         return check_if_section(item)
     else:
+        section_types_list = list(section_types.values())
+        if item.lower() in section_types_list:
+            return section_types_list.index(item.lower())
         return first_upper_letter_words_flag  # Returns False
 
 
@@ -312,6 +331,7 @@ def re_structure_text(originalText):
                 current_sentence.clear()
     text = fix_missing_sentences_loop(text)
     text = remove_bad_sentences(text)
+    text = [sent.encode('ascii', 'replace').decode().replace('?', ' ') for sent in text]  # Fix encoding issues
     return text
 
 
@@ -325,7 +345,10 @@ def word_number_ratio(sent, threshold=0.4, spaces_threshold=0.5):
         return False
     numbers = sum(c.isdigit() for c in sent)
     words = sum(c.isalpha() for c in sent)
-    ratio = words / float(numbers + words)
+    try:
+        ratio = words / float(numbers + words)
+    except ZeroDivisionError:
+        return False
     if ratio < threshold:
         return False
     else:
@@ -337,7 +360,8 @@ def loop_regex_rules(text, regex_rules):
     # text = re.sub(regex_rules[8], 'date', text)  # Date
     # text = re.sub(regex_rules[9], 'time', text)  # Time
     # text = re.sub(regex_rules[10], 'time', text)  # Time
-    text = text.replace('\t', '')
+    text = text.replace('\t', ' ')
+    text = re.sub(r'\s{2,}', '\n', text)
     text = re.sub(regex_rules[2], 'tel', text)  # Telephone
     text = re.sub(regex_rules[3], 'tel', text)  # Telephone
     text = re.sub(regex_rules[4], 'tel', text)  # Telephone

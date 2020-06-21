@@ -160,6 +160,23 @@ def classify_LDA_model_oneSentence(current_text, mode='LDA'):
     return topic_class
 
 
+def clear_variables():
+    global current_model
+    global data
+    global id2word
+    global texts
+    global corpus
+
+    if current_model is not None:
+        del current_model
+    if data is not None:
+        del data
+    if id2word is not None:
+        del id2word
+    if texts is not None:
+        del texts
+    if corpus is not None:
+        del corpus
 # data, id2word, texts, corpus = load_data('10Topic')
 # current_model = load_Model()
 

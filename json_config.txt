@@ -1,10 +1,10 @@
 {
 "first_stage": {
-	"inputFile_path": "data/130.txt",
+	"inputFile_path": "data/18803.txt",
 	"discourseInput": "/home/tzvi/PycharmProjects/linuxDiscourse/src/Input/xml/"
 	},
 "second_stage":{
-	"xml_result_path": "130.txt.xml",
+	"xml_result_path": "18803.txt.xml",
 	"discourse_script_path": "/home/tzvi/PycharmProjects/linuxDiscourse/src/main_src.py"
 	},
 "third_stage":{
@@ -13,7 +13,7 @@
 		"4" : true,
 		"6" : true,
 		"10": true,
-		"hdp": true
+		"hdp": false
 		},
 	"models_path":{
 	    "topic_4_model" : "gensim_models/4topics/lda_model_trained_4topics.model",

@@ -116,6 +116,8 @@ def run_show_case(fileId, modelNumber, **pathParams):
                         else:
                             adjust = -28
                         section_name = '%' + re.sub('[^a-zA-z_]', '', files[:adjust]).strip()[1:] + '_text%'
+                        if section_name == '%non_section_text%':
+                            section_name = '%other_text%'
 
                         params[section_name].set_status(disabled)
                         params['%' + params[section_name].code + '%'] = params[section_name].merge()
@@ -134,7 +136,7 @@ def run_show_case(fileId, modelNumber, **pathParams):
             path = os.path.join(dir_path, str(model))
             for files in os.listdir(path):
                 print(files)
-                if file_name == int(files[:-4]):
+                if str(file_name) == files[:-4]:
                     with open(os.path.join(path, files), mode='r') as cur_file:
                         text = cur_file.read()
                         write_final_stage_file(json.loads(text), file_name, model, mode='text')
@@ -155,9 +157,11 @@ def run_show_case(fileId, modelNumber, **pathParams):
         text = ''
         root = json_dict[0]['children']
         for section in root:
-            text += section['name'] + '\n'
+            if mode != 'nucleus':
+                text += section['name'] + '\n'
             for topic in section['children']:
-                text += 'Topic: ' + topic['name'] + '\n'
+                if mode != 'nucleus':  # To create final report of nucleus without any addition info just text
+                    text += 'Topic: ' + topic['name'] + '\n'
                 if mode == 'all':
                     text += topic['children'][0]['children'][0]['name'] + '\n'  # All the text
                     text += '<--- Nucleus Text ---> \n'
