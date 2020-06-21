@@ -221,7 +221,7 @@ def pre_process_single_file(original_file, discourse_project_input_dir):
     # Extracts just the file name from the path
     filename = original_file.split(os.path.sep)[-1]
 
-    with open(original_file, mode='r') as data:
+    with open(original_file, mode='r', encoding='utf-8') as data:
         originalData = data.read()
         restructured_text = re_structure_text(originalData)
         create_txt_file(restructured_text, filename)
@@ -231,3 +231,4 @@ def pre_process_single_file(original_file, discourse_project_input_dir):
 
 # regression_reduction('output/regex_xml')
 # main_preProcess_v2()
+# pre_process_single_file(original_file='/home/tzvi/PycharmProjects/HSdataprocessLinux/30502.txt', discourse_project_input_dir='/home/tzvi/PycharmProjects/linuxDiscourse/src/Input/xml/')

@@ -1,0 +1,3 @@
+ROUGE evaluation processed using the kavgan/ROUGE-2.0 project:
+Link: https://github.com/kavgan/ROUGE-2.0
+To run the "kavgnaRouge.py" code need to donwload the basic package of the ROUGE-2.0 project.

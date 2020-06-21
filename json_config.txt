@@ -1,0 +1,35 @@
+{
+"first_stage": {
+	"inputFile_path": "data/18803.txt",
+	"discourseInput": "/home/tzvi/PycharmProjects/linuxDiscourse/src/Input/xml/"
+	},
+"second_stage":{
+	"xml_result_path": "18803.txt.xml",
+	"discourse_script_path": "/home/tzvi/PycharmProjects/linuxDiscourse/src/main_src.py"
+	},
+"third_stage":{
+	"file_id": "id_int",
+	"models": {
+		"4" : true,
+		"6" : true,
+		"10": true,
+		"hdp": false
+		},
+	"models_path":{
+	    "topic_4_model" : "gensim_models/4topics/lda_model_trained_4topics.model",
+        "topic_4_data_dir" : "gensim_files/4Topic",
+        "topic_6_model" : "gensim_models/6topics/lda_model_trained_6topics.model",
+        "topic_6_data_dir" : "gensim_files/6Topic",
+        "topic_10_model" : "gensim_models/10topics/lda_model_trained_10topics.model",
+        "topic_10_data_dir" : "gensim_files/10Topic",
+        "hdp_model" : "gensim_models/hdp_model.model"
+	    }
+},
+"fourth_stage": {
+	"file_id": "id_int"
+	},
+"show_case":{
+	"file_id": "id_int",
+	"model_number": "modelNumber_int"
+	}
+}

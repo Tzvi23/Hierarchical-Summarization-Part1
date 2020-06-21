@@ -254,7 +254,7 @@ def get_text(unit_node, topic_number, mode='A', text=''):
             if mode == 'A':
                 text += unit_node.pure_text
             elif mode == 'N':
-                text += unit_node.nucleus_pure_text
+                text += ' ' + unit_node.nucleus_pure_text
             elif mode == 'SN':
                 if unit_node.short_nucleus_text == '':
                     text += ''
@@ -366,7 +366,7 @@ def write_data_csv(unit_root, topics, filename, dest_dir, complex_struct=True):
                 writer_dict.clear()
                 writer_dict[fieldnames[0]] = topic_number
                 writer_dict[fieldnames[1]] = topics[topic_number]
-                writer_dict[fieldnames[2]] = 'Simple tree'
+                writer_dict[fieldnames[2]] = topics[topic_number]  # Simple tree
                 writer.writerow(writer_dict)
 
 def process_topic_file(file_path, dest_dir):
