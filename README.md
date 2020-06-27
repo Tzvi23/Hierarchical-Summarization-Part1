@@ -21,7 +21,13 @@ The pipeline of the proposed methodology includes the following steps:
 
 The project evaluation is based on both extrinsic and intrinsic evaluation, using clustering and ROUGE metrics, respectively.
 
-**Demo Video**
+**Full code version**<br>
+Using this [drive-link](https://drive.google.com/file/d/11ykn0xxPvXrmrQTdJon5l1kEwXTO8ih9/view?usp=sharing) you can download the full code version with input/output/models included. (Size of 3GB)
+
+**Instructions**<br>
+Instruction file can be downloaded [HERE](https://drive.google.com/file/d/1T4rJLjEubH1pabaUI81TUIYliaA5MZXG/view?usp=sharing)
+
+**Demo Video**<br>
 This project contains a functional GUI for the user to go throught the pipeline of creating a single hierarchical summary. <br>
 GUI demo can be found in the following [Google-drive-link](https://drive.google.com/file/d/14qMRUhZIwaVoSltaLPSiH6NZx13M_9ue/view?usp=sharing) 
 
