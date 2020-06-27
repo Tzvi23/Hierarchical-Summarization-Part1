@@ -1,0 +1,42 @@
+data/*
+clusters/corpus.csv
+-r output/final_stage/4/*
+-r output/final_stage/6/*
+-r output/final_stage/10/*
+-r output/final_stage/20/*
+output/final_stage_graph/4/*
+output/final_stage_graph/6/*
+output/final_stage_graph/10/*
+output/final_stage_graph/20/*
+output/regex_xml/*
+output/text/*
+output/text_xml/*
+output/topic_class/4/*
+output/topic_class/4/textData/*
+output/topic_class/6/*
+output/topic_class/6/textData/*
+output/topic_class/10/*
+output/topic_class/10/textData/*
+output/topic_class/20/*
+output/topic_class/20/textData/*
+output/xml/*
+-r output/xmlParse/*
+output/regex_json_file
+output/regex_json_file_dep
+Rouge/kavgan_rouge/projects/test-summarization/reference/*
+Rouge/kavgan_rouge/projects/test-summarization/system/*
+show_case/final_report/4/nucleus/*
+show_case/final_report/4/text/*
+show_case/final_report/6/nucleus/*
+show_case/final_report/6/text/*
+show_case/final_report/10/nucleus/*
+show_case/final_report/10/text/*
+show_case/final_report/20/nucleus/*
+show_case/final_report/20/text/*
+show_case/original_text/*
+show_case/output/*
+show_case/text_xml/*
+show_case/topic_class/*
+show_case/xml_parse/*
+show_case/show_case_28080_4.html
+

@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 import os
 import csv
 from utils.util_functions import strip_tags, init_section_structure
+from project_config import parser
 # # create the file structure
 # data = ET.Element('data')
 # section1 = ET.SubElement(data, 'section')
@@ -96,7 +97,7 @@ def calculateStats():
             dataProcWriter.writerow([res, xmlDataStats[res]])
 
 
-def createXmlDocument_v2(text, fileName, path='output/xml/'):
+def createXmlDocument_v2(text, fileName, path=parser.get('xmlTree', 'createXmlDocument_v2_path')):
     sections_type = init_section_structure()
     if not os.path.isdir('output'):
         os.mkdir('output')
@@ -144,7 +145,7 @@ def createXmlDocument_v2(text, fileName, path='output/xml/'):
     return path + fileName + ".xml"
 
 
-def read_xml_file(filename_path, filename, target_dir='output/text_xml'):
+def read_xml_file(filename_path, filename, target_dir=parser.get('xmlTree', 'read_xml_file_target_dir')):
     if not os.path.isdir(target_dir):
         os.mkdir(target_dir)
     tree = ET.parse(filename_path)

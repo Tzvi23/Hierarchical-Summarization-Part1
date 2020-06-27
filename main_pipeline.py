@@ -1,7 +1,7 @@
 """
 This is the main pipeline script
 """
-
+from project_config import parser
 """
 First Stage
 1. Load the original file to be processed.
@@ -9,7 +9,7 @@ First Stage
 """
 
 
-def first_stage(inputFile_path, discourseInput='/home/tzvi/PycharmProjects/linuxDiscourse/src/Input/xml/'):
+def first_stage(inputFile_path, discourseInput=parser.get('main_pipeline', 'discourseInput')):
     import preprocess
 
     preprocess.pre_process_single_file(inputFile_path, discourseInput)
@@ -23,7 +23,7 @@ Using the discourse project by running the main script of the project with argum
 """
 
 
-def second_stage(xml_result_path, discourse_script_path='/home/tzvi/PycharmProjects/linuxDiscourse/src/main_src.py'):
+def second_stage(xml_result_path, discourse_script_path=parser.get('main_pipeline', 'discourse_script_path')):
     import os
     os.system(' '.join(['python2', discourse_script_path, xml_result_path]))
     # subprocess.call([discourse_script_path, xml_result_path], shell=True)
@@ -45,13 +45,13 @@ def third_stage(file_id, models=None):
     else:
         loop_models_one_file(models,
                              file_id=str(file_id),
-                             topic_4_model='gensim_models/4topics/lda_model_trained_4topics.model',
-                             topic_4_data_dir='gensim_files/4Topic',
-                             topic_6_model='gensim_models/6topics/lda_model_trained_6topics.model',
-                             topic_6_data_dir='gensim_files/6Topic',
-                             topic_10_model='gensim_models/10topics/lda_model_trained_10topics.model',
-                             topic_10_data_dir='gensim_files/10Topic',
-                             hdp_model='gensim_models/hdp_model.model'
+                             topic_4_model=parser.get('main_pipeline', 'topic_4_model'),
+                             topic_4_data_dir=parser.get('main_pipeline', 'topic_4_data_dir'),
+                             topic_6_model=parser.get('main_pipeline', 'topic_6_model'),
+                             topic_6_data_dir=parser.get('main_pipeline', 'topic_6_data_dir'),
+                             topic_10_model=parser.get('main_pipeline', 'topic_10_model'),
+                             topic_10_data_dir=parser.get('main_pipeline', 'topic_10_data_dir'),
+                             hdp_model=parser.get('main_pipeline', 'hdp_model')
                              )
 
 
@@ -81,12 +81,12 @@ This stage collects all the data needed and parse it in json formats and creates
 def show_case(file_id, model_number):
     from show_case.show_case_functions import run_show_case
     show_case_url = run_show_case(file_id, model_number,
-                                  original_text_dir='/home/tzvi/PycharmProjects/HSdataprocessLinux/data',
-                                  xml_processed_dir='/home/tzvi/PycharmProjects/HSdataprocessLinux/output/text_xml',
-                                  xml_parse_dir='/home/tzvi/PycharmProjects/HSdataprocessLinux/output/xmlParse',
-                                  topic_class_dir='/home/tzvi/PycharmProjects/HSdataprocessLinux/output/topic_class',
-                                  trees_dir='/home/tzvi/PycharmProjects/linuxDiscourse/src/Output',
-                                  final_stage_dir='/home/tzvi/PycharmProjects/HSdataprocessLinux/output/final_stage_graph'
+                                  original_text_dir=parser.get('main_pipeline', 'original_text_dir'),
+                                  xml_processed_dir=parser.get('main_pipeline', 'xml_processed_dir'),
+                                  xml_parse_dir=parser.get('main_pipeline', 'xml_parse_dir'),
+                                  topic_class_dir=parser.get('main_pipeline', 'topic_class_dir'),
+                                  trees_dir=parser.get('main_pipeline', 'trees_dir'),
+                                  final_stage_dir=parser.get('main_pipeline', 'final_stage_dir')
                                   )
     return show_case_url
 
@@ -94,5 +94,5 @@ def show_case(file_id, model_number):
 # first_stage('data/28695.txt')
 # second_stage('2326.txt.xml')
 # third_stage(92, {'4': True, '6': False, '10': False, 'hdp': False})
-fourth_stage(28080, '4')
-show_case(28080, 4)
+# fourth_stage(28080, '4')
+# show_case(28080, 4)

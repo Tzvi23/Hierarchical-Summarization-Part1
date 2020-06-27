@@ -9,25 +9,25 @@ def create_node(name, parent, node=True):
         node_dict['children'] = list()
     return node_dict
 
-data = list()
-data.append(create_node('file code', 'null'))
+# data = list()
+# data.append(create_node('file code', 'null'))
+#
+# d = '[{\"name\": "file code", "parent": "null", "children": []}]'
+#
+# with open('jsonTest.txt', mode='w') as outfile:
+#     json.dump(data, outfile)
 
-d = '[{\"name\": "file code", "parent": "null", "children": []}]'
 
-with open('jsonTest.txt', mode='w') as outfile:
-    json.dump(data, outfile)
-
-
-def convert_data_to_json(numberOfFiles=1000,
-                         targetFolder=os.path.join('output', 'regex_xml'),
-                         jsonOutFileName='regex_json_file_dep'):
+def convert_data_to_json(numberOfFiles=None,
+                         targetFolder=os.path.join('output', 'text_xml'),
+                         jsonOutFileName='regex_json_file'):
     data = dict()
     data['content'] = dict()
     fileCounter = 1
     if os.path.isdir(targetFolder):
         for file in os.listdir(targetFolder):
             print('Processing: {0}'.format(file))
-            if fileCounter <= numberOfFiles:
+            if numberOfFiles is None or fileCounter <= numberOfFiles:
                 with open(os.path.join(targetFolder, file), mode='r') as targetFile:
                     readData = targetFile.read()
                     data['content'][file[:-4]] = readData

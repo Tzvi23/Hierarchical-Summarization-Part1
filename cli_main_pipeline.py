@@ -10,7 +10,9 @@ import datetime
 import csv
 from print_colors import bcolors
 from gensimModelServer import build_model
+from utils.json_converter import convert_data_to_json
 import testing_grounds as tg
+from Rouge.kavgan_rouge.kavganRouge import run_rouge_kavgan
 import pickle
 
 pp = pprint.PrettyPrinter()
@@ -22,15 +24,19 @@ ap = argparse.ArgumentParser(description='HS Main pipeline CLI')
 
 FUNCTIONS = [
     'first_stage',
+    'first_stage_loop',
     'second_stage',
     'third_stage',
     'fourth_stage',
     'run_stages',
     'build_model',
+    'convert_corpus',
     'run_kmeans',
     'cluster_eval',
+    'rouge_eval',
     'config_update',
-    'config_print'
+    'config_print',
+    'reset_data'
 ]
 
 # Load config file
@@ -125,6 +131,14 @@ elif args.command == 'config_update':
     update_config(args.updateSpecific)
 elif args.command == 'first_stage':
     mp.first_stage(config['first_stage']['inputFile_path'], config['first_stage']['discourseInput'])
+elif args.command == 'first_stage_loop':
+    if args.all_path is None:
+        raise ImportError('Data path not provided use: [-ap] or [--all-path] <dir-path>')
+    else:
+        dir_path = args.all_path
+        for file in os.listdir(dir_path):
+            mp.first_stage(os.path.join(dir_path, file), config['first_stage']['discourseInput'])
+        print(f'{bcolors.OKGREEN}Finished pre-processing{bcolors.ENDC}')
 elif args.command == 'second_stage':
     mp.second_stage(config['second_stage']['xml_result_path'], config['second_stage']['discourse_script_path'])
 elif args.command == 'third_stage':
@@ -169,10 +183,6 @@ elif args.command == 'run_stages':
                         print(f'{bcolors.FAIL}File not found!{bcolors.ENDC}')
                         exit(0)
                 # Start the process
-                with open('not_proc_queue.pickle', 'rb') as f:
-                    queue = pickle.load(f)
-                    queue.reverse()
-                    queue = queue[53:]
                 for file in queue:
                     # Check if file been processed
                     if proc_list is not None and file in proc_list:
@@ -210,10 +220,13 @@ elif args.command == 'run_stages':
             raise FileExistsError('[--all-path] Check path: Exists? Is it a directory?')
 elif args.command == 'build_model':
     if args.number_of_topics is None:
-        raise ImportError('Provide number of topics 4/6/10')
+        raise ValueError('Provide number of topics 4/6/10')
     else:
         print(f'{bcolors.HEADER}\tBuild LDA model started{bcolors.ENDC}')
         build_model(int(args.number_of_topics))
+elif args.command == 'convert_corpus':
+    print(f'{bcolors.HEADER}\tConverting corpus to json{bcolors.ENDC}')
+    convert_data_to_json()
 elif args.command == 'run_kmeans':
     if args.cluster_path is None:
         raise ValueError('Provide corpus path using [-cp] / [--cluster_path]')
@@ -225,7 +238,17 @@ elif args.command == 'run_kmeans':
         run_kmeans(args.cluster_path, args.output_plots)
 # Cluster eval
 elif args.command == 'cluster_eval':
-    # Currently ignore changing the json config file
-    tg.cluster_eval(config)
-
+    if args.number_of_topics is None:
+        raise ValueError('Provide number of topics 4/6/10')
+    if args.checkLog is None:
+        raise ValueError('Provide log file')
+    tg.cluster_eval(topic_number=args.number_of_topics, log_path=args.checkLog)
+# Rouge kavgan eval
+elif args.command == 'rouge_eval':
+    run_rouge_kavgan()
+# Reset project - DELETE ALL DATA!!
+elif args.command == 'reset_data':
+    print(f'{bcolors.FAIL} Warning! Will delete all data after confirmation.\nAll paths can be seen at reset_project_paths.txt. {bcolors.ENDC}')
+    from reset_project import reset_project
+    reset_project()
 

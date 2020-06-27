@@ -26,21 +26,19 @@ def build_model(numberOfTopics):
     stop_words = stopwords.words('english')
 
     def save_pickle(filename, data, gensim_files_dir):
-        with open(os.path.join(gensim_files_dir, filename +'.pickle'), 'wb') as data_file:
+        with open(os.path.join(gensim_files_dir,  os.path.join(str(numberOfTopics) + 'Topic', filename + '.pickle')), 'wb') as data_file:
             pickle.dump(data, data_file)
 
     def load_saved_pickle(filename, gensim_files_dir):
-        file_path = filename + '.pickle'
+        file_path = os.path.join(str(numberOfTopics) + 'Topic', filename + '.pickle')
         if not os.path.exists(os.path.join(gensim_files_dir, file_path)):
             return False
         else:
             with open(os.path.join(gensim_files_dir, file_path), 'rb') as data_file:
                 return pickle.load(data_file)
 
-
     def data_status(name, val):
         pprint(name + ' => {0}'.format(str(val) if not val else 'Data loaded'))
-
 
     gensim_files_dir = 'gensim_files'  # path to load data if exists
     # Check if saved file exisits
@@ -63,7 +61,9 @@ def build_model(numberOfTopics):
     data_words_bigrams = load_saved_pickle('data_words_bigrams', gensim_files_dir)
     data_status('data_words_bigrams', data_words_bigrams)
 
-
+    if not os.path.exists(os.path.join('output', 'regex_json_file')):
+        print('regex_json_file not exits! Convert corpus to json!\n Cannot build LDA model.')
+        exit(1)
     json_data_path = os.path.join('output', 'regex_json_file')  # Load converted corpus to json
     df = pd.read_json(json_data_path)
     df.head()
@@ -84,19 +84,18 @@ def build_model(numberOfTopics):
         save_pickle('data', data, gensim_files_dir)
     pprint(data[:1])
 
-
     def sent_to_words(sentences):
         for sentence in sentences:
-            yield(gensim.utils.simple_preprocess(str(sentence), deacc=True))  # deacc=True removes punctuations
+            yield (gensim.utils.simple_preprocess(str(sentence), deacc=True))  # deacc=True removes punctuations
+
     if not data_words:
         data_words = list(sent_to_words(data))
         save_pickle('data_words', data_words, gensim_files_dir)
     print(data_words[:1])
 
-
     # Build the bigram and trigram models
     if not bigram_mod:
-        bigram = gensim.models.Phrases(data_words, min_count=5, threshold=100) # higher threshold fewer phrases.
+        bigram = gensim.models.Phrases(data_words, min_count=5, threshold=100)  # higher threshold fewer phrases.
     if not trigram_mod:
         trigram = gensim.models.Phrases(bigram[data_words], threshold=100)
 
@@ -109,7 +108,6 @@ def build_model(numberOfTopics):
         save_pickle('trigram_mod', trigram_mod, gensim_files_dir)
     # See trigram example
     print(trigram_mod[bigram_mod[data_words[0]]])
-
 
     # Define functions for stopwords, bigrams, trigrams and lemmatization
     def remove_stopwords(texts):
@@ -129,9 +127,8 @@ def build_model(numberOfTopics):
             texts_out.append([token.lemma_ for token in doc if token.pos_ in allowed_postags])
         return texts_out
 
-
     if not data_words_nostops:
-    # Remove Stop Words
+        # Remove Stop Words
         data_words_nostops = remove_stopwords(data_words)
         save_pickle('data_words_nostops', data_words_nostops, gensim_files_dir)
 
@@ -139,7 +136,6 @@ def build_model(numberOfTopics):
         # Form Bigrams
         data_words_bigrams = make_bigrams(data_words_nostops)
         save_pickle('data_words_bigrams', data_words_bigrams, gensim_files_dir)
-
 
     if not id2word or not texts:
         # Initialize spacy 'en' model, keeping only tagger component (for efficiency)
@@ -153,7 +149,6 @@ def build_model(numberOfTopics):
         data_lemmatized = lemmatization(data_words_bigrams, allowed_postags=['NOUN', 'ADJ', 'VERB', 'ADV'])
 
         print(data_lemmatized[:1])
-
 
     if not id2word:
         # Create Dictionary
@@ -173,6 +168,8 @@ def build_model(numberOfTopics):
     # View
     print(corpus[:1])
 
+    gensim_models_dir = 'gensim_models'
+
     force_create = True
     # Check if model exists
     if os.path.exists('lda_model_trained.model') and force_create is False:
@@ -182,20 +179,16 @@ def build_model(numberOfTopics):
         pprint('Building Model')
         # Build LDA model
         lda_model = gensim.models.ldamodel.LdaModel(corpus=corpus,
-                                                   id2word=id2word,
-                                                   num_topics=numberOfTopics,
-                                                   random_state=100,
-                                                   update_every=1,
-                                                   chunksize=100,
-                                                   passes=10,
-                                                   alpha='auto',
-                                                   per_word_topics=True)
-        lda_model.save(os.path.join(gensim_files_dir, 'lda_model_trained.model'))
+                                                    id2word=id2word,
+                                                    num_topics=numberOfTopics,
+                                                    random_state=100,
+                                                    update_every=1,
+                                                    chunksize=100,
+                                                    passes=10,
+                                                    alpha='auto',
+                                                    per_word_topics=True)
+        lda_model.save(os.path.join(os.path.join(gensim_models_dir, str(numberOfTopics) + 'topics'), 'lda_model_trained_' + str(numberOfTopics) + 'topics.model'))
 
-
-    # Print the Keyword in the 10 topics
+    # Print the Keyword in the topics
     pprint(lda_model.print_topics())
     doc_lda = lda_model[corpus]
-
-
-

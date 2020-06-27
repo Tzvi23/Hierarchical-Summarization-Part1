@@ -3,9 +3,10 @@ import os
 import re
 import copy
 from nltk import WordNetLemmatizer
+from project_config import parser
 
 
-def import_regex(path='/home/tzvi/PycharmProjects/HSdataprocessLinux/utils/regex_preprocess.csv'):
+def import_regex(path=parser.get('util_functions', 'import_regex_path')):
     """
     Imports as list of regex expressions from file
     :param path: path to regex file

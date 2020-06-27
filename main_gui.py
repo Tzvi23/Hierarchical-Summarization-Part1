@@ -5,6 +5,7 @@ import os
 import webbrowser
 import PySimpleGUI as sg
 import main_pipeline as mp
+from project_config import parser
 
 
 def check_data_and_report(fileId, path):
@@ -46,7 +47,7 @@ first_stage_layout = [
      sg.Input(disabled=True, size=(40, 1), key='filePathBrowse'),
      sg.FileBrowse()],
     [sg.Text('Discourse input\nfolder path', size=(15, 2), justification='center'),
-     sg.Input(disabled=True, size=(40, 1), default_text='/home/tzvi/PycharmProjects/linuxDiscourse/src/Input/xml/',
+     sg.Input(disabled=True, size=(40, 1), default_text=parser.get('main_pipeline', 'discourseInput'),
               key='discoursePathBrowse'), sg.FileBrowse()],
     [sg.Button('Process', key='process_button'), sg.Button('Next Stage', key='nextStage_button', visible=False)]
 ]
@@ -62,12 +63,12 @@ second_stage_layout = [
     [sg.Text('Complicated process that takes time. Be patient!', justification='center', font=("Helvetica", 11),
              text_color='black', background_color='grey')],
     [sg.Text('Discourse script\n path', size=(15, 2), justification='center'),
-     sg.Input(disabled=True, size=(40, 1), default_text='/home/tzvi/PycharmProjects/linuxDiscourse/src/main_src.py',
+     sg.Input(disabled=True, size=(40, 1), default_text=parser.get('main_pipeline', 'discourse_script_path'),
               key='discourseScriptBrowse'), sg.FileBrowse()],
     [sg.Button('Process', key='process_button2')],
     [sg.Frame(layout=[
         [sg.Text('Discourse Output\nFolder', justification='center', size=(15, 2)),
-                 sg.Input(disabled=True, size=(40, 1), default_text='/home/tzvi/PycharmProjects/linuxDiscourse/src/Output', key='dOutputFolderPath'), sg.FileBrowse()],
+                 sg.Input(disabled=True, size=(40, 1), default_text=parser.get('main_pipeline', 'trees_dir'), key='dOutputFolderPath'), sg.FileBrowse()],
         [sg.Button('Check Data', key='checkData')]
     ], title='Check if processed', relief=sg.RELIEF_SUNKEN, title_location=sg.TITLE_LOCATION_TOP, element_justification='center')],
     [sg.Button('Next Stage', key='nextStage_button2', visible=False)]
@@ -194,7 +195,7 @@ while True:  # The Event Loop
             master_window['second_stage_button'].update(button_color=('white', 'red'), disabled_button_color=('white', 'red'))
     if event is 'checkData':
         pop_up_window['-ml-' + sg.WRITE_ONLY_KEY].update(value='')
-        res = check_data_and_report(input_path.split(os.path.sep)[-1][:-4], '/home/tzvi/PycharmProjects/linuxDiscourse/src/Output')  # TODO update file id
+        res = check_data_and_report(input_path.split(os.path.sep)[-1][:-4], parser.get('main_pipeline', 'trees_dir'))  # TODO update file id
         if isinstance(res, list):
             for stat in res:
                 pop_up_window['-ml-'+sg.WRITE_ONLY_KEY].print(stat[0] + ' | ' + stat[1] + ' | ', end='')

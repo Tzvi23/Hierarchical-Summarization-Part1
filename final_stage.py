@@ -14,6 +14,7 @@ from Classes.unit_class import unit_connector
 from Classes.unit_class import one_leaf_unit
 from Classes.graph_classes.graph_node import node_graph, nodeEncoder
 import sent_rank as sr
+from project_config import parser
 
 score_data = list()  # declaration for global
 
@@ -26,13 +27,13 @@ def create_model_dict(model):
     return model_dict
 # Load models
 topic_labels = dict()
-topic4 = gensim.models.ldamodel.LdaModel.load('/home/tzvi/PycharmProjects/HSdataprocessLinux/gensim_models/4topics/lda_model_trained_4topics.model')
+topic4 = gensim.models.ldamodel.LdaModel.load(parser.get('final_stage', 'load_4topic'))
 topic4 = create_model_dict(topic4)
 topic_labels['4'] = topic4
-topic6 = gensim.models.ldamodel.LdaModel.load('/home/tzvi/PycharmProjects/HSdataprocessLinux/gensim_models/6topics/lda_model_trained_6topics.model')
+topic6 = gensim.models.ldamodel.LdaModel.load(parser.get('final_stage', 'load_6topic'))
 topic6 = create_model_dict(topic6)
 topic_labels['6'] = topic6
-topic10 = gensim.models.ldamodel.LdaModel.load('/home/tzvi/PycharmProjects/HSdataprocessLinux/gensim_models/10topics/lda_model_trained_10topics.model')
+topic10 = gensim.models.ldamodel.LdaModel.load(parser.get('final_stage', 'load_10topic'))
 topic10 = create_model_dict(topic10)
 topic_labels['10'] = topic10
 
@@ -404,7 +405,7 @@ def process_topic_file(file_path, dest_dir):
         write_data_csv(unit_root, topic_stats, file_path, dest_dir, complex_struct=True)
 
 
-def loop_topic_data(fileID=None, model_number=None, dir_path='output/topic_class', dest_dir='output/final_stage'):
+def loop_topic_data(fileID=None, model_number=None, dir_path=parser.get('final_stage', 'loop_topic_data_dir_path'), dest_dir=parser.get('final_stage','loop_topic_data_dest_dir')):
     global score_data
     if not os.path.exists(dest_dir):
         os.mkdir(dest_dir)
@@ -448,7 +449,6 @@ def create_json_repr(file_id, data_dir, model_number):
         graph_file.write(test_list.replace('\\\\n', '').replace('\'', ''))
 
 def read_processed_text(file_path, parent_name, model_number):
-    # TODO check if regular expression effects something
     children_list = list()
     with open(file_path, mode='r') as proc_file:
         csv_reader = csv.DictReader(proc_file)

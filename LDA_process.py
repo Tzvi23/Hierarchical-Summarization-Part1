@@ -6,6 +6,7 @@ import subprocess
 import json
 import os
 from print_colors import bcolors
+from project_config import parser
 
 
 def strip_name(input_name):
@@ -60,7 +61,7 @@ def recursive_read_text(json_output, results_dict_list, counter, text_tuples, mo
 
 
 def loop_discourse_results(topic_number, mode='LDA',
-                           discourse_output_dir='/home/tzvi/PycharmProjects/linuxDiscourse/src/Output'):
+                           discourse_output_dir=parser.get('LDA_process', 'loop_discourse_results_one_file_discourse_output_dir')):
     results_dict = dict()
     counter = 0
     for discourse_results in os.listdir(discourse_output_dir):
@@ -112,7 +113,7 @@ def write_stats_to_file_hlda(results_dict):
 
 
 def classify_discourse_tree(filename, results_dict_list, dis_dir, topicNumber, text_tuples, mode='LDA',
-                            script_path='/home/tzvi/PycharmProjects/linuxDiscourse/src/javaScript_functions.py'):
+                            script_path=parser.get('LDA_process', 'classify_discourse_tree_script_path')):
     dir_path = os.path.join('output/topic_class', str(topicNumber))
     if not os.path.exists(dir_path):
         os.mkdir(dir_path)
@@ -218,7 +219,7 @@ def loop_models():
 # region one file functions
 def loop_models_one_file(models_choice, **params):
     def loop_discourse_results_one_file(topic_number, fileId, mode='LDA',
-                                        discourse_output_dir='/home/tzvi/PycharmProjects/linuxDiscourse/src/Output'):  # TODO: Change hard coded path
+                                        discourse_output_dir=parser.get('LDA_process', 'loop_discourse_results_one_file_discourse_output_dir')):
         results_dict = dict()  # each file processed and list of all the topics detected
         for discourse_results in os.listdir(discourse_output_dir):
             # If the current file is a dir => continue

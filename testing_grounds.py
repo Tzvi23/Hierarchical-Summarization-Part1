@@ -12,6 +12,7 @@ import os
 from print_colors import bcolors
 import numpy as np
 import pandas as pd
+from project_config import parser
 
 
 def create_confusion_matrix(ground_truth, process_files):
@@ -99,7 +100,7 @@ def processed_list(log_file):
     return file_list
 
 
-def check_files(proc_list, discourse_output_path='/home/tzvi/PycharmProjects/linuxDiscourse/src/Output'):
+def check_files(proc_list, discourse_output_path=parser.get('cluster_eval', 'discourse_output_path')):
     """
     Makes sure that there files in the output dir that correspond with the proc_list
     If files are missing, removes the file name from the proc_list
@@ -123,13 +124,18 @@ def evaluation_list(eval_dir):
     return eval_list
 
 
-def cluster_eval(config_file=None):
+def cluster_eval(topic_number=4, log_path=None):
     # Get list of all processed files
-    proc_files = processed_list('logs/D29_04_20M17_37.txt')
+    if log_path is None:
+        print(f'{bcolors.FAIL} Please provide log path {bcolors.ENDC}')
+        exit(1)
+    # proc_files = processed_list('logs/D29_04_20M17_37.txt')
+    proc_files = processed_list(log_path)
     print(proc_files)
     check_files(proc_files)
     # Process all the files that finished discourse parsing
     # third stage & four stage
+    # Can be uncommented if running files separately - Stages 1+2 and then 3+4
     """
     for file_id in proc_files:
         f_id = int(file_id[:-4])  # remove .txt and convert to int value
@@ -150,32 +156,35 @@ def cluster_eval(config_file=None):
                 if config_file['third_stage']['models'][key] is True:
                     mp.fourth_stage(f_id, key)
                     mp.show_case(f_id, int(key))
-    """
+    
     input('Finished processing - press space+enter')
+    """
 
-    proc_files = evaluation_list('/home/tzvi/PycharmProjects/HSdataprocessLinux/show_case/final_report/4/nucleus')
+    nucleus_path = os.path.join(parser.get('cluster_eval', 'evaluation_list'), os.path.join(str(topic_number), 'nucleus'))
+    proc_files = evaluation_list(nucleus_path)
 
-    create_clustering_corpus('data/',
-                             '/home/tzvi/PycharmProjects/HSdataprocessLinux/clusters',
+    create_clustering_corpus(parser.get('cluster_eval', 'original_data'),
+                             parser.get('cluster_eval', 'cluster_folder'),
                              file_name='corpus.csv')
 
+    cluster_folder_path = parser.get('cluster_eval', 'cluster_folder')
     print('Finished processing the data\nStarting to cluster....')
     # Calculate clustering for the current <!-original-!> files
     print(f'{bcolors.WARNING}Clustering original files{bcolors.ENDC}')
-    truth, original_M = run_kmeans('/home/tzvi/PycharmProjects/HSdataprocessLinux/clusters/corpus.csv',
-                                   '/home/tzvi/PycharmProjects/HSdataprocessLinux/clusters/output_plots',
+    truth, original_M = run_kmeans(os.path.join(cluster_folder_path, 'corpus.csv'),
+                                   os.path.join(cluster_folder_path, 'output_plots'),
                                    proc_files,
                                    'clustering_report.txt')
 
     print(f'{bcolors.WARNING}Creating new corpus{bcolors.ENDC}')
     # Create new clustering corpus from the processed files
-    create_clustering_corpus('/home/tzvi/PycharmProjects/HSdataprocessLinux/show_case/final_report/4/nucleus',
-                             '/home/tzvi/PycharmProjects/HSdataprocessLinux/clusters')
+    create_clustering_corpus(nucleus_path,
+                             cluster_folder_path)
 
     print(f'{bcolors.WARNING}Clustering for processed files{bcolors.ENDC}')
     # Calculate clustering for the current <!-processed-!> files
-    predict, predict_M = run_kmeans('/home/tzvi/PycharmProjects/HSdataprocessLinux/clusters/after_corpus.csv',
-                                    '/home/tzvi/PycharmProjects/HSdataprocessLinux/clusters/after_output_plots',
+    predict, predict_M = run_kmeans(os.path.join(cluster_folder_path, 'after_corpus.csv'),
+                                    os.path.join(cluster_folder_path, 'after_output_plots'),
                                     proc_files,
                                     'after_clustering_report.txt')
 
