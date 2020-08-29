@@ -217,7 +217,7 @@ while True:  # The Event Loop
         try:
             # noinspection PyUnboundLocalVariable
             file_id = int(input_path.split(os.path.sep)[-1][:-4])
-            models_dict = {'10': values['10'], '6': values['6'], '4': values['4'], 'hdp': values['hdp']}
+            models_dict = {'10': values['10'], '6': values['6'], '4': values['4'], 'hdp': False}
             mp.third_stage(file_id, models_dict)
             master_window['third_stage_button'].update(button_color=('white', 'green'),disabled_button_color=('white', 'green'))
             sg.popup_ok('Done', title='Notification')

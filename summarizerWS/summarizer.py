@@ -1,4 +1,5 @@
 from summarizerWS import topicRanker as tr
+from project_config import parser
 import os
 import math
 
@@ -78,13 +79,14 @@ def build_summary(data, topicImportance):
 Main function
 Creates a summary for specific file based on ranking of each topic in each section.
 Each section can add up to 100 words based on MAX_WORD variable
+provide file_id: int type
 """
-def create_summary(file_id, des_dir='/home/tzvi/PycharmProjects/HSdataprocessLinux/summarizerWS/summaries'):
+# des_dir='/home/tzvi/PycharmProjects/HSdataprocessLinux/summarizerWS/summaries'
+def create_summary(file_id, des_dir=parser.get('summarizerWS', 'des_dir')):
     file_data, topic_score = tr.score_fileID(file_id)
     count_words(file_data)
     new_summary = build_summary(file_data, topic_score)
     with open(os.path.join(des_dir, str(file_id) + '.txt'), 'w') as output_file:
         output_file.writelines(new_summary)
-
 
 # create_summary(26464)

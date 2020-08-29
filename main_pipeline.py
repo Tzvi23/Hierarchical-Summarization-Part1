@@ -2,6 +2,15 @@
 This is the main pipeline script
 """
 from project_config import parser
+
+def convert_topics_for_show_case(modelNumber=10):
+    from final_stage import topic_labels
+    import json
+    topics = topic_labels[str(modelNumber)]
+    for topic in topics.keys():
+        topics[topic] = topics[topic].split('|')
+        topics[topic] = [w.strip() for w in topics[topic]]
+    return json.dumps(topics)
 """
 First Stage
 1. Load the original file to be processed.
@@ -87,7 +96,7 @@ def show_case(file_id, model_number, topic_words=None):
                                   topic_class_dir=parser.get('main_pipeline', 'topic_class_dir'),
                                   trees_dir=parser.get('main_pipeline', 'trees_dir'),
                                   final_stage_dir=parser.get('main_pipeline', 'final_stage_dir'),
-                                  topic_data=topic_words
+                                  topic_data=convert_topics_for_show_case(model_number)
                                   )
     return show_case_url
 
@@ -96,17 +105,9 @@ def show_case(file_id, model_number, topic_words=None):
 # second_stage('2326.txt.xml')
 # third_stage(92, {'4': True, '6': False, '10': False, 'hdp': False})
 # fourth_stage(28080, '4')
-# show_case(28080, 4)
+# show_case(25110, 10)
 
 def run_last_stages():
-    def convert_topics_for_show_case(modelNumber=10):
-        from final_stage import topic_labels
-        import json
-        topics = topic_labels[str(modelNumber)]
-        for topic in topics.keys():
-            topics[topic] = topics[topic].split('|')
-            topics[topic] = [w.strip() for w in topics[topic]]
-        return json.dumps(topics)
 
     from summarizerWS import summarizer
     import os

@@ -3,6 +3,7 @@ import math
 import os
 import pickle
 from Classes.leaf_class import leaf
+from project_config import parser
 
 unit_counter = 0
 file_name = ' '
@@ -63,7 +64,7 @@ class unit:
                 if v.node_class == 'N':
                     self.nucleus_text.append(v.text)
 
-    def decide_topic(self):  # TODO: need to refine conditions
+    def decide_topic(self):  # Older functionality - Ignore
         """
         Decides the unit overall topic number
         """
@@ -95,7 +96,7 @@ class unit:
 
             self.unit_topic = N_max
 
-    def decide_topic_2(self, tree_height, mode='V'):
+    def decide_topic_2(self, tree_height, mode=parser.get('nucleus_weight_approach', 'mode')):
         """
         Decides the unit overall topic number
         Mode:

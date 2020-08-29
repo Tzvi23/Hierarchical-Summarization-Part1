@@ -4,6 +4,7 @@ import pickle
 from pathlib import Path
 import LDA_classifier as classifier
 from print_colors import bcolors
+from project_config import parser
 
 # Change working directory
 def change_working_dir():
@@ -13,13 +14,14 @@ def change_working_dir():
 # change_working_dir()
 
 # Directory that contains all the CSV files for each file with topic/text data
-OUTPUT_FINAL_STAGE_PATH = 'output/final_stage'
-TOPIC_MODEL = 10
-FILE_ID = 65
+# OUTPUT_FINAL_STAGE_PATH = 'output/final_stage'
+OUTPUT_FINAL_STAGE_PATH = parser.get('summarizerWS', 'OUTPUT_FINAL_STAGE_PATH')
 
 # region Model loading
-MODEL_PATH = '/home/tzvi/PycharmProjects/HSdataprocessLinux/gensim_models/10topics/lda_model_trained_10topics.model'
-DATA_DIR = '/home/tzvi/PycharmProjects/HSdataprocessLinux/gensim_files/10Topic'
+MODEL_PATH = parser.get('summarizerWS', 'MODEL_PATH')
+DATA_DIR = parser.get('summarizerWS', 'DATA_DIR')
+# MODEL_PATH = '/home/tzvi/PycharmProjects/HSdataprocessLinux/gensim_models/10topics/lda_model_trained_10topics.model'
+# DATA_DIR = '/home/tzvi/PycharmProjects/HSdataprocessLinux/gensim_files/10Topic'
 
 # Working with 10 topic model
 def load_LDA_model(topic_model, topic_data_dir):
@@ -95,7 +97,8 @@ def score_fileID(fileId, topicModel=10):
 
 
 # region <---- Second Approach NI x TI ---->
-TOPIC_CLASS = '/home/tzvi/PycharmProjects/HSdataprocessLinux/output/scores'
+TOPIC_CLASS = parser.get('summarizerWS', 'TOPIC_CLASS')
+# TOPIC_CLASS = '/home/tzvi/PycharmProjects/HSdataprocessLinux/output/scores'
 
 def load_pickle_data(file_id, modelNumber):
     basePath = Path(TOPIC_CLASS)
@@ -126,6 +129,14 @@ def process_score_data(file_score):
     return total_score
 
 def create_summary_NSxTI(fileId, modelNumber, maxWords=1000):
+    """
+    Creates a summary using the second approach: ranking all the nucleuses and by greedy method create
+    a summary until maxWords is reached.
+    :param fileId: int type file id
+    :param modelNumber: specific model number to use: 10/4/6 if trained
+    :param maxWords: max count words for the summary report
+    :return:
+    """
     file_score_data = load_pickle_data(file_id=fileId, modelNumber=modelNumber)
     textData = process_score_data(file_score_data)
     new_text = list()
@@ -142,20 +153,20 @@ def create_summary_NSxTI(fileId, modelNumber, maxWords=1000):
     write_text_to_file(fileId=fileId, newSummary=new_text)
 
 def write_text_to_file(fileId, newSummary):
-    OUTPUT_SUMMARY_PATH = Path('/home/tzvi/PycharmProjects/HSdataprocessLinux/summarizerWS/summaries_NuVec_NI_TI')
+    OUTPUT_SUMMARY_PATH = Path(parser.get('summarizerWS', 'OUTPUT_SUMMARY_PATH'))
     with open(OUTPUT_SUMMARY_PATH / (str(fileId) + '_NuVec_NI_TI.txt'), mode='w') as outFile:
         outFile.writelines(newSummary)
 
 # create_summary_NSxTI(fileId=26464, modelNumber=10)
 def run_dataSet():
-    DATA_PATH = '/home/tzvi/PycharmProjects/HSdataprocessLinux/data'
+    DATA_PATH = parser.get('summarizerWS', 'DATA_PATH')
     queue = [file[:-4] for file in os.listdir(DATA_PATH)]
 
     for file in queue:
         print(f'{bcolors.OKGREEN}Processing: {file}{bcolors.ENDC}')
         create_summary_NSxTI(fileId=int(file), modelNumber=10)
 
-run_dataSet()
+# run_dataSet()
 
 # endregion
 

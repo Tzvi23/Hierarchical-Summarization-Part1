@@ -125,7 +125,7 @@ def evaluation_list(eval_dir):
     return eval_list
 
 
-def cluster_eval(topic_number=4, log_path=None):
+def cluster_eval(topic_number, log_path=None):
     """# Get list of all processed files
     if log_path is None:
         print(f'{bcolors.FAIL} Please provide log path {bcolors.ENDC}')
@@ -209,4 +209,4 @@ def cluster_eval(topic_number=4, log_path=None):
     report_df.to_excel("eval_report.xlsx")
 
 
-cluster_eval(topic_number=10)
+# cluster_eval(topic_number=10)

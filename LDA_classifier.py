@@ -136,7 +136,7 @@ def classify_LDA_model_oneSentence(current_text, mode='LDA'):
         return topic_class, sent_score, result_list[0]
     else:
         for i in range(len(local_words_nostops)):
-            try:  # TODO check how to address the problem "index out of bounds"
+            try:
                 res = current_model[other_corpus[i]]
                 result_list.append(res[0])
             except IndexError as e:
