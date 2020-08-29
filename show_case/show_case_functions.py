@@ -2,6 +2,8 @@ import json
 import os
 import re
 
+SUMMARY_DIR = '/home/tzvi/PycharmProjects/HSdataprocessLinux/summarizerWS/summaries'
+
 def run_show_case(fileId, modelNumber, **pathParams):
     class section_obj:
         def __init__(self, code, isTopic=False, status='0'):
@@ -26,7 +28,7 @@ def run_show_case(fileId, modelNumber, **pathParams):
         def set_status(self, stat):
             self.status = stat
 
-    sections_types = ['other', 'chairmans statement', 'chief executive officer ceo review', 'chief executive officer ceo report',
+    sections_types = ['miscellaneous', 'chairmans statement', 'chief executive officer ceo review', 'chief executive officer ceo report',
                       'governance statement',
                       'remuneration report',
                       'business review', 'financial review', 'operating review', 'highlights', 'auditors report',
@@ -39,6 +41,10 @@ def run_show_case(fileId, modelNumber, **pathParams):
     params['%original_text%'] = 'original_text'
     # Xml processed text - %xml_processed_text%
     params['%xml_processed_text%'] = 'xml_processed_txt'
+    # Summary text
+    params['%summary_text%'] = 'summary_text'
+    # Table data topic
+    params['%topic_data%'] = pathParams['topic_data']
 
     # region Sections
     off = '0'
@@ -95,7 +101,7 @@ def run_show_case(fileId, modelNumber, **pathParams):
                 if file_name == cur_id:
                     section_name = '%' + re.sub('[^a-zA-z_]', '', files[:-23]).strip()[1:] + '_text_topic%'
                     if section_name == '%non_section_text_topic%':
-                        section_name = '%other_text_topic%'
+                        section_name = '%miscellaneous_text_topic%'
                     with open(os.path.join(path, files), mode='r') as cur_file:
                         text = cur_file.read()
                         params[section_name].set_text(text)
@@ -117,7 +123,7 @@ def run_show_case(fileId, modelNumber, **pathParams):
                             adjust = -28
                         section_name = '%' + re.sub('[^a-zA-z_]', '', files[:adjust]).strip()[1:] + '_text%'
                         if section_name == '%non_section_text%':
-                            section_name = '%other_text%'
+                            section_name = '%miscellaneous_text%'
 
                         params[section_name].set_status(disabled)
                         params['%' + params[section_name].code + '%'] = params[section_name].merge()
@@ -125,7 +131,7 @@ def run_show_case(fileId, modelNumber, **pathParams):
                     elif 'strip_output' in files:
                         section_name = '%' + re.sub('[^a-zA-z_]', '', files[:-17]).strip()[1:] + '_text%'
                         if section_name == '%non_section_text%':
-                            section_name = '%other_text%'
+                            section_name = '%miscellaneous_text%'
 
                         with open(os.path.join(dir_path, files), mode='r') as cur_file:
                             text = cur_file.read()
@@ -141,13 +147,19 @@ def run_show_case(fileId, modelNumber, **pathParams):
                         text = cur_file.read()
                         write_final_stage_file(json.loads(text), file_name, model, mode='text')
                         write_final_stage_file(json.loads(text), file_name, model, mode='nucleus')
+                        text = text.replace('"non section"', '"miscellaneous"')
                         params['%final_stage_result%'] = text
+
+        def load_summary(file_name, summary_dir=SUMMARY_DIR):
+            with open(os.path.join(summary_dir, str(file_name) + '.txt'), 'r') as sumFile:
+                params['%summary_text%'] = sumFile.read()
 
         load_tree_data(file_id)
         load_original_text(file_id)
         load_xml_processed(file_id)
         load_sections_data(file_id, model_number)
         load_final_stage_data(file_id, model_number)
+        load_summary(file_id)
 
     def write_final_stage_file(json_dict, filename, model, mode='all'):
         cur_dir = os.path.join(os.path.join(os.path.join(os.path.join(os.getcwd(), 'show_case'), 'final_report'), str(model)), mode)

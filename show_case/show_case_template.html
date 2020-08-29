@@ -112,6 +112,8 @@
 </div>
 <!-- load the d3.js library -->	
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+<script src= "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 <!-- load scripts for discourse parsing tree -->
 <link href="Rhetorical%20Parser%20Interface_files/interactive_tree.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="Rhetorical%20Parser%20Interface_files/d3.js"></script>
@@ -135,11 +137,11 @@
 <div id='third-stage'>
 	<!-- Discourse tree -->
 	<!-- First line buttons def: id=> _0 - hide _1 - show A - text B - nucleus text  -->
-	<div><button id='%0%' class="button button2" onclick="change_data('0_A')"> Other </button>   <button id='%1%' class="button button2" onclick="change_data('1_A')"> Chairmans Statement </button>  <button id='%2%' class="button button2" onclick="change_data('2_A')"> chief executive officer ceo review </button>   <button id='%3%' class="button button2" onclick="change_data('3_A')"> chief executive officer ceo report </button>   <button id='%4%' class="button button2" onclick="change_data('4_A')"> Governance Statement </button>  <button id='%5%' class="button button2" onclick="change_data('5_A')"> Remuneration Report </button>   <button id='%6%' class="button button2" onclick="change_data('6_A')"> Business review </button>   <button id='%7%' class="button button2" onclick="change_data('7_A')"> Financial Review</button>   <button id='%8%' class="button button2" onclick="change_data('8_A')"> Operating Review</button>   <button id='%9%' class="button button2" onclick="change_data('9_A')"> Highlights</button>   <button id='%10%' class="button button2" onclick="change_data('10_A')"> Auditors Report</button>   <button id='%11%' class="button button2" onclick="change_data('11_A')"> Risk Management</button>   <button id='%12%' class="button button2" onclick="change_data('12_A')"> charimans governance introduction</button>   <button id='%13%' class="button button2" onclick="change_data('13_A')"> corporate social responsibility CSR disclosures</button></div>
+	<div><button id='%0%' class="button button2" onclick="change_data('0_A')"> miscellaneous </button>   <button id='%1%' class="button button2" onclick="change_data('1_A')"> Chairmans Statement </button>  <button id='%2%' class="button button2" onclick="change_data('2_A')"> chief executive officer ceo review </button>   <button id='%3%' class="button button2" onclick="change_data('3_A')"> chief executive officer ceo report </button>   <button id='%4%' class="button button2" onclick="change_data('4_A')"> Governance Statement </button>  <button id='%5%' class="button button2" onclick="change_data('5_A')"> Remuneration Report </button>   <button id='%6%' class="button button2" onclick="change_data('6_A')"> Business review </button>   <button id='%7%' class="button button2" onclick="change_data('7_A')"> Financial Review</button>   <button id='%8%' class="button button2" onclick="change_data('8_A')"> Operating Review</button>   <button id='%9%' class="button button2" onclick="change_data('9_A')"> Highlights</button>   <button id='%10%' class="button button2" onclick="change_data('10_A')"> Auditors Report</button>   <button id='%11%' class="button button2" onclick="change_data('11_A')"> Risk Management</button>   <button id='%12%' class="button button2" onclick="change_data('12_A')"> charimans governance introduction</button>   <button id='%13%' class="button button2" onclick="change_data('13_A')"> corporate social responsibility CSR disclosures</button></div>
 
-	<div><button id='%00%' class="button button3" onclick="change_data('00_B')"> Other </button>   <button id='%01%' class="button button3" onclick="change_data('01_B')"> Chairmans Statement </button>  <button id='%02%' class="button button3" onclick="change_data('02_B')"> chief executive officer ceo review </button>   <button id='%03%' class="button button3" onclick="change_data('03_B')"> chief executive officer ceo report </button>   <button id='%04%' class="button button3" onclick="change_data('04_B')"> Governance Statement </button>  <button id='%05%' class="button button3" onclick="change_data('05_B')"> Remuneration Report </button>   <button id='%06%' class="button button3" onclick="change_data('6_B')"> Business review </button>   <button id='%07%' class="button button3" onclick="change_data('7_B')"> Financial Review</button>   <button id='%08%' class="button button3" onclick="change_data('8_B')"> Operating Review</button>   <button id='%09%' class="button button3" onclick="change_data('9_B')"> Highlights</button>   <button id='%010%' class="button button3" onclick="change_data('010_B')"> Auditors Report</button>   <button id='%011%' class="button button3" onclick="change_data('011_B')"> Risk Management</button>   <button id='%012%' class="button button3" onclick="change_data('012_B')"> charimans governance introduction</button>   <button id='%013%' class="button button3" onclick="change_data('013_B')"> corporate social responsibility CSR disclosures</button></div>
+	<div><button id='%00%' class="button button3" onclick="change_data('00_B')"> miscellaneous </button>   <button id='%01%' class="button button3" onclick="change_data('01_B')"> Chairmans Statement </button>  <button id='%02%' class="button button3" onclick="change_data('02_B')"> chief executive officer ceo review </button>   <button id='%03%' class="button button3" onclick="change_data('03_B')"> chief executive officer ceo report </button>   <button id='%04%' class="button button3" onclick="change_data('04_B')"> Governance Statement </button>  <button id='%05%' class="button button3" onclick="change_data('05_B')"> Remuneration Report </button>   <button id='%06%' class="button button3" onclick="change_data('6_B')"> Business review </button>   <button id='%07%' class="button button3" onclick="change_data('7_B')"> Financial Review</button>   <button id='%08%' class="button button3" onclick="change_data('8_B')"> Operating Review</button>   <button id='%09%' class="button button3" onclick="change_data('9_B')"> Highlights</button>   <button id='%010%' class="button button3" onclick="change_data('010_B')"> Auditors Report</button>   <button id='%011%' class="button button3" onclick="change_data('011_B')"> Risk Management</button>   <button id='%012%' class="button button3" onclick="change_data('012_B')"> charimans governance introduction</button>   <button id='%013%' class="button button3" onclick="change_data('013_B')"> corporate social responsibility CSR disclosures</button></div>
 
-	<!--<div><button id='%00%' class="button button3" onclick="change_data('00_A')"> Other Topics</button>   <button id='11_1' class="button button3" onclick="change_data('Financial Review Topics')"> Chairmans Statement Topics </button></div>-->
+	<!--<div><button id='%00%' class="button button3" onclick="change_data('00_A')"> miscellaneous Topics</button>   <button id='11_1' class="button button3" onclick="change_data('Financial Review Topics')"> Chairmans Statement Topics </button></div>-->
 	<div id='section'>
 		<table id='discourse-table' align='center'>
 			<tr>
@@ -192,8 +194,8 @@
 					case 'A':
 								switch(section_name)
 								{
-									//Other section
-									case '0': rhetoricParsingOutput = '%other_text%';
+									//miscellaneous section
+									case '0': rhetoricParsingOutput = '%miscellaneous_text%';
 									break;
 									//chairmans_statement section
 									case '1': rhetoricParsingOutput = '%chairmans_statement_text%';
@@ -240,8 +242,8 @@
 					case 'B':
 								switch(section_name)
 								{
-									//Other section
-									case '00': json_processed = '%other_text_topic%';
+									//miscellaneous section
+									case '00': json_processed = '%miscellaneous_text_topic%';
 									break;
 									//chairmans_statement section
 									case '01': json_processed = '%chairmans_statement_text_topic%';
@@ -999,7 +1001,7 @@
 						return 1;
 					}
 				}
-				// Otherwise, call recursively on descendants of current nodes (if they have any)
+				// miscellaneouswise, call recursively on descendants of current nodes (if they have any)
 				for (var j = 0; j < currentnodes.length; j++)
 				{
 					if (currentnodes[j].children)
@@ -1054,8 +1056,40 @@
 </div>
 
 <!-- Final stage section -->
-<div><button class="button button5" onclick="show_item('final_stage')"> Final Stage Result </button></div>
+<div><button class="button button5" onclick="show_item('final_stage')"> Hierarchical Visualization </button></div>
 <div id='final_stage'>
+	<textarea id="node_text" rows="8" cols="150"></textarea>
+	<div id="tableContainer"></div>
+	  <script type="text/javascript"> var children = [%topic_data%];
+													  
+		function addHeaders(table, keys) {
+		  var row = table.insertRow();
+		  for( var i = 0; i < keys.length; i++ ) {
+			var cell = row.insertCell();
+			cell.appendChild(document.createTextNode(keys[i]));
+		  }
+		}
+
+		var table = document.createElement('table');
+		  table.className = "table";
+		for( var i = 0; i < children.length; i++ ) {
+
+		  var child = children[i];
+		  if(i === 0 ) {
+			addHeaders(table, Object.keys(child));
+		  }
+		  var row = table.insertRow();
+		  Object.keys(child).forEach(function(k) {
+			console.log(k);
+			var cell = row.insertCell();
+			cell.appendChild(document.createTextNode(child[k]));
+		  })
+		}
+
+		document.getElementById('tableContainer').appendChild(table);											  
+	  </script>
+</div>
+</div>
 <script>
 
 function show_final_result()
@@ -1233,7 +1267,7 @@ document.getElementById('second_stage').style.display = "none";
 document.getElementById('final_stage').style.display = "none";
 document.getElementById("final_stage_tree_svg").style.display = "none";
 document.getElementById("third-stage").style.display = "none";
-//Other functions
+//miscellaneous functions
 function show_text_box(divid)
 {
 	var x = document.getElementById(divid);
@@ -1257,8 +1291,13 @@ function show_item(divId)
     graph.style.display = "none";
   }
 }
+
+		
 </script>
-	<textarea id="node_text" rows="8" cols="150"></textarea>
+		<!-- Summary section -->
+<div><button class="button button5" onclick="show_text_box('summaryArea')"> Report Summary </button></div>
+<div id='summaryArea' style="display: none">
+	<textarea id="summaryArea" rows="8" cols="150">%summary_text%</textarea>	
 </div>
   </body>
 </html>

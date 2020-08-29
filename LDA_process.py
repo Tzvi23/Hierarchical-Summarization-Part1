@@ -43,8 +43,8 @@ def recursive_read_text(json_output, results_dict_list, counter, text_tuples, mo
         [node_type, node_edge, node_number, node_relation] = strip_name(content_leaf)
         if node_filter is None:
             counter += 1
-            topic_class, sent_score = classifier.classify_LDA_model_oneSentence(content_text, mode)
-            text_tuples.append((counter, content_text, topic_class, sent_score, 1 if node_type == 'Nucleus' else 0))
+            topic_class, sent_score, topic_vector = classifier.classify_LDA_model_oneSentence(content_text, mode)
+            text_tuples.append((counter, content_text, topic_class, sent_score, 1 if node_type == 'Nucleus' else 0, topic_vector))
             results_dict_list.append(topic_class)
             json_output['name'] = json_output['name'] + ' | Topic: ' + str(topic_class)
             return counter
@@ -256,7 +256,7 @@ def loop_models_one_file(models_choice, **params):
     topic_10_data_dir = params['topic_10_data_dir']
     hdp_model = params['hdp_model']
 
-    classifier.clear_variables()
+    # classifier.clear_variables()
     if models_choice['4'] is True:
         # 4 topics model
         classifier.load_Model_local(topic_4_model)
@@ -273,9 +273,10 @@ def loop_models_one_file(models_choice, **params):
 
     if models_choice['10'] is True:
         # 10 topics model
-        classifier.load_Model_local(topic_10_model)
-        classifier.load_data_local(topic_10_data_dir)
-        classifier.print_model_topics()
+        if classifier.current_model is None:
+            classifier.load_Model_local(topic_10_model)
+            classifier.load_data_local(topic_10_data_dir)
+            classifier.print_model_topics()
         loop_discourse_results_one_file(10, file_id, mode='LDA')
 
     if models_choice['hdp'] is True:

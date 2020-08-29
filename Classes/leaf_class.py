@@ -8,6 +8,8 @@ class leaf(base_node):
         self.score = 0
         self.text = ''
         self.position = 0
+        self.ni_score = 0
+        self.topic_vector = list()
 
     def set_position(self, leaf_pos):
         self.position = leaf_pos

@@ -5,6 +5,7 @@ import os
 import pprint
 import re
 import gensim
+from Classes import unit_class
 from print_colors import bcolors
 from Classes.base_class import Position
 from Classes.node_class import node
@@ -17,6 +18,11 @@ import sent_rank as sr
 from project_config import parser
 
 score_data = list()  # declaration for global
+tree_depth = 0  # declaration for global variable to be used
+textTuples = tuple()
+
+# To adjust the sent tuples - temp static path
+FOLDER_PATH = '/home/tzvi/PycharmProjects/HSdataprocessLinux/output/scores/10'
 
 def create_model_dict(model):
     model_dict = dict()
@@ -25,6 +31,8 @@ def create_model_dict(model):
     for t in model_data:
         model_dict[t[0]] = ' | '.join([item.strip()[6:] for item in t[1].replace('"', '').split('+')[0:4]])
     return model_dict
+
+
 # Load models
 topic_labels = dict()
 topic4 = gensim.models.ldamodel.LdaModel.load(parser.get('final_stage', 'load_4topic'))
@@ -64,7 +72,7 @@ def convert_to_tree_object(json_output, tree, node_filter=None):
         content_split = content[0].strip().replace('(', '').replace(')', '').split()
         tree.rel2par = content_split[4]
         tree.node_number_L = int(content_split[2])
-        tree.score = sr.get_score(score_data, content_text)
+        tree.score, tree.topic_vector = sr.get_score(score_data, content_text)
         if node_filter is None:
             return tree
         elif node_filter == node_type:
@@ -182,17 +190,19 @@ def create_one_leaf_unit(leaf_node):
 
 
 def create_unit(base_node, new_unit, previous_node, dest_node):
+    global tree_depth
     if base_node is dest_node:
         return new_unit
     if base_node.left_child is previous_node or base_node.left_child is previous_node:
-        new_unit.add_new_node(base_node.right_child)
+        new_unit.add_new_node(base_node.right_child, tree_height=tree_depth)
         create_unit(base_node.parent, new_unit, base_node, dest_node)
         return new_unit
     # new_unit = unit()
     new_unit.set_unit_top_node(base_node)
     new_unit.set_unit_size(base_node.get_complexity() + 1)  # +1 to include the base node
     new_unit.update_leafs()
-    new_unit.decide_topic()
+    # new_unit.decide_topic()
+    new_unit.decide_topic_2(tree_height=tree_depth)
     new_unit.update_pure_text()
     if base_node.parent is not None:
         create_unit(base_node.parent, new_unit, base_node, dest_node)
@@ -371,7 +381,9 @@ def write_data_csv(unit_root, topics, filename, dest_dir, complex_struct=True):
                 writer.writerow(writer_dict)
 
 def process_topic_file(file_path, dest_dir):
+    global tree_depth
     print(bcolors.HEADER + 'Processing: {0}'.format(file_path) + bcolors.ENDC)
+    unit_class.file_name = os.path.join(FOLDER_PATH, file_path.split(os.path.sep)[-1][:-4] + '.pickle')
     # Read json file after topic classification
     parsed_json = json.loads(open(file_path, 'r').read())
     print(parsed_json)
@@ -379,6 +391,7 @@ def process_topic_file(file_path, dest_dir):
     root = node()
     root = convert_to_tree_object(parsed_json, root)
     update_tree_data(root)
+    tree_depth = root.depth
     update_tree_complex_status(root)
     # test_node = find_node_id(root, 1, 3)
 
@@ -434,13 +447,17 @@ def loop_topic_data(fileID=None, model_number=None, dir_path=parser.get('final_s
 
 
 def create_json_repr(file_id, data_dir, model_number):
+    nonSectionFlag = False
     root = node_graph(file_id)
     for section in os.listdir(data_dir):
         section_name = re.sub('[0-9]', '', section[:-27]).replace('_', ' ').strip()
         print(section_name)
+        if section_name == 'non section':
+            nonSectionFlag = True
         section_node = node_graph(section_name, root.name, children=True)
         section_node.children = (read_processed_text(os.path.join(data_dir, section), section_name, model_number))
         root.add_children(section_node)
+    print(root)
 
     with open(data_dir.replace('final_stage', 'final_stage_graph') + '.txt', mode='w') as graph_file:
         test_list = list()
@@ -456,24 +473,27 @@ def read_processed_text(file_path, parent_name, model_number):
             print(row)
             topic_node = node_graph(row['topic_number'], parent_name, children=True)
             if model_number != '20':
-                topic_node.name = topic_node.name + ' ' + topic_labels[model_number][int(topic_node.name)]
+                # Disabled the topic words
+                # topic_node.name = topic_node.name + ' ' + topic_labels[model_number][int(topic_node.name)]
+                topic_node.name = topic_node.name
             # Text
             text_node = node_graph('Text', topic_node.name, children=True)
             text_str_node = node_graph(re.sub('[^a-zA-z0-9\s\.\\n]', '', pp.pformat(row['Text'])), text_node.name, children=False)
             text_node.add_children(text_str_node)
             topic_node.add_children(text_node)
             # Nucleus Text Nucleus_text
-            nucleus_node = node_graph('Nucleus Text', topic_node.name, children=True)
+            # nucleus_node = node_graph('Nucleus Text', topic_node.name, children=True)
+            nucleus_node = node_graph('Summary', topic_node.name, children=True)
             nucleus_str_node = node_graph(re.sub('[^a-zA-z0-9\s\.\\n]', '', pp.pformat(row['Nucleus_text'])), nucleus_node.parent, children=False)
             nucleus_node.add_children(nucleus_str_node)
             topic_node.add_children(nucleus_node)
-            # Short Nucleus Text Nucleus_text
-            if len(row) == 4 and row['Short_nucleus'] != '':
+            # Short Nucleus Text Nucleus_text - disabled
+            """if len(row) == 4 and row['Short_nucleus'] != '':
                 nucleus_node = node_graph('Short nucleus', topic_node.name, children=True)
                 nucleus_str_node = node_graph(re.sub('[^a-zA-z0-9\s\.]', '', pp.pformat(row['Short_nucleus'])),
                                               nucleus_node.parent, children=False)
                 nucleus_node.add_children(nucleus_str_node)
-                topic_node.add_children(nucleus_node)
+                topic_node.add_children(nucleus_node)"""
 
             children_list.append(topic_node)
     return children_list

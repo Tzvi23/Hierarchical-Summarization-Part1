@@ -21,7 +21,7 @@ def check_data_and_report(fileId, path):
     else:
         res = list()
         for file in found_files:
-            file = file[:-4]  # Remove .txt
+            file = file[:-4]  # Remove .txtf
             if 'strip' in file:
                 section = ' '.join(file[:file.index('strip') - 1].split('_')[1:])
             else:
@@ -84,8 +84,7 @@ third_stage_layout = [
         font=('Helvetica', 11), justification='center')],
     [sg.Frame(layout=[[sg.Checkbox('10 topics model', key='10', default=True),
                        sg.Checkbox('6 topics model', key='6', default=True),
-                       sg.Checkbox('4 topics model', key='4', default=True),
-                       sg.Checkbox('HDP model', key='hdp', default=False)]],
+                       sg.Checkbox('4 topics model', key='4', default=True)]],
               title='Pre-trained LDA models', relief=sg.RELIEF_SUNKEN, title_location=sg.TITLE_LOCATION_TOP)],
     [sg.Button('Process', key='process_button3'), sg.Button('Next Stage', key='nextStage_button3', visible=False)]
 ]
@@ -114,7 +113,7 @@ fifth_stage_layout = [
         'This stage collects all the data needed and parse it in json formats to create\n'
         'a local .html file to view the results in an interactive way.',
         font=('Helvetica', 11), justification='center')],
-    [sg.Text('Choose model'), sg.Combo(['10 topic model', '6 topic model', '4 topic model', 'HDP model'], default_value='10 topic model', key='topicChoice')],
+    [sg.Text('Choose model'), sg.Combo(['10 topic model', '6 topic model', '4 topic model'], default_value='10 topic model', key='topicChoice')],
     [sg.Button('Process', key='process_button5'), sg.Button('Show Case', key='show_case', visible=False)]
 ]
 # endregion
@@ -218,7 +217,7 @@ while True:  # The Event Loop
         try:
             # noinspection PyUnboundLocalVariable
             file_id = int(input_path.split(os.path.sep)[-1][:-4])
-            models_dict = {'10': values['10'], '6': values['6'], '4': values['4'], 'hdp': values['hdp']}
+            models_dict = {'10': values['10'], '6': values['6'], '4': values['4'], 'hdp': False}
             mp.third_stage(file_id, models_dict)
             master_window['third_stage_button'].update(button_color=('white', 'green'),disabled_button_color=('white', 'green'))
             sg.popup_ok('Done', title='Notification')

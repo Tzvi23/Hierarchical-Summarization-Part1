@@ -146,6 +146,12 @@ def createXmlDocument_v2(text, fileName, path=parser.get('xmlTree', 'createXmlDo
 
 
 def read_xml_file(filename_path, filename, target_dir=parser.get('xmlTree', 'read_xml_file_target_dir')):
+    stats_counter = {'name': filename,
+                     'words': 0,
+                     'sentences': 0,
+                     'sections': 0,
+                     'wordsPerSection': 0}
+
     if not os.path.isdir(target_dir):
         os.mkdir(target_dir)
     tree = ET.parse(filename_path)
@@ -156,14 +162,30 @@ def read_xml_file(filename_path, filename, target_dir=parser.get('xmlTree', 'rea
             if elem.tag == 'S':
                 txtXml.write(elem.text + '\n')
                 print(elem.text)
+                # Stat
+                stats_counter['sentences'] += 1
+                stats_counter['words'] += len(elem.text.strip().split())
             elif elem.tag == 'section':
                 txtXml.write(elem.attrib['name'] + '\n')
                 print(elem.attrib['name'])
+                # Stat
+                stats_counter['sections'] += 1
+                stats_counter['words'] += len(elem.attrib['name'].strip().split())
             elif elem.tag == 'OneItem':
                 txtXml.write(elem.text + '\n')
+                print(elem.text)
+                stats_counter['words'] += len(elem.text.strip().split())
             for subelem in elem:
                 txtXml.write(subelem.text + '\n')
                 print(subelem.text)
+                stats_counter['words'] += len(subelem.text.strip().split())
+                stats_counter['wordsPerSection'] += len(subelem.text.strip().split())
+
+    # Write to stat file
+    with open('data_set_statistics.csv', mode='a') as statFile:
+        fieldNames = list(stats_counter.keys())
+        writer = csv.DictWriter(statFile, fieldnames=fieldNames)
+        writer.writerow(stats_counter)
 
 
 def temp_create_text_xml_files(source_dir=os.path.join('output', 'xml')):

@@ -133,10 +133,10 @@ def classify_LDA_model_oneSentence(current_text, mode='LDA'):
             topic_class, sent_score = max(result_list[0], key=lambda item: item[1])[0], max(result_list[0], key=lambda item: item[1])[1]
         except ValueError:
             topic_class = -1
-        return topic_class, sent_score
+        return topic_class, sent_score, result_list[0]
     else:
         for i in range(len(local_words_nostops)):
-            try:  # TODO check how to address the problem "index out of bounds"
+            try:
                 res = current_model[other_corpus[i]]
                 result_list.append(res[0])
             except IndexError as e:
@@ -158,6 +158,39 @@ def classify_LDA_model_oneSentence(current_text, mode='LDA'):
         except ValueError:
             topic_class = -1
     return topic_class
+
+
+# Score topic  [New function created 16/08]
+def score_topic(current_text, topic_number):
+    current_text = current_text.split()
+    # Remove dot and new line symbols from the sentences
+    current_text = [sent.replace('.', '') for sent in current_text]
+    # Remove Stop Words
+    local_words_nostops = remove_stopwords(current_text)
+    local_words_nostops = list(filter(lambda x: len(x), local_words_nostops))
+    x = [id2word.doc2bow(text) for text in local_words_nostops]  # Convert words to encode repr
+    x = list(filter(lambda x: len(x), x))  # remove empty lists
+    x = [item[0] for item in x]
+    result_list = current_model[x]  # Evaluate using the LDA model
+    sub_list = result_list[2]  # List of tuples with each word and the probabilities
+    prob_list = list()
+    for w in sub_list:
+        c_w = w[1]
+        if not len(c_w):
+            prob_list.append(0)
+        else:
+            c_w = dict(c_w)
+            try:
+                prob_list.append(c_w[topic_number])
+            except KeyError:
+                prob_list.append(0)
+
+    sum_prob = sum(prob_list)
+    try:
+        score = sum_prob/len(sub_list)
+    except ZeroDivisionError:
+        score = 0
+    return score
 
 
 def clear_variables():

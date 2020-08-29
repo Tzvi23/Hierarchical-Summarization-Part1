@@ -2,7 +2,7 @@ import os
 import csv
 import re
 
-def create_clustering_corpus(dir_data_path, output_path, file_name='after_corpus.csv'):
+def create_clustering_corpus(dir_data_path, output_path, file_name='after_corpus.csv', customSystemTag=''):
     if not os.path.isdir(dir_data_path):
         print(f'Cant find dir path try again. Dir path given: {dir_data_path}')
         return
@@ -20,6 +20,12 @@ def create_clustering_corpus(dir_data_path, output_path, file_name='after_corpus
                     txt = re.sub(r'[\n]', ' ', txt).strip()
                 if file_name != 'after_corpus.csv':
                     out_write.writerow({'file_id': file[:-4], 'text': txt})
+                elif '_summ' in file:
+                    out_write.writerow({'file_id': file.replace('_summ', '')[:-4], 'text': txt})
+                elif customSystemTag == '':
+                    out_write.writerow({'file_id': file[:-4], 'text': txt})
+                elif customSystemTag != '':
+                    out_write.writerow({'file_id': file.replace(customSystemTag, '')[:-4], 'text': txt})
                 else:
                     out_write.writerow({'file_id': file[:-12], 'text': txt})
         print('[!!] New after_corpus.csv Created!')

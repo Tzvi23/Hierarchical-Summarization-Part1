@@ -13,6 +13,7 @@ from print_colors import bcolors
 import numpy as np
 import pandas as pd
 from project_config import parser
+import time
 
 
 def create_confusion_matrix(ground_truth, process_files):
@@ -124,15 +125,15 @@ def evaluation_list(eval_dir):
     return eval_list
 
 
-def cluster_eval(topic_number=4, log_path=None):
-    # Get list of all processed files
+def cluster_eval(topic_number, log_path=None):
+    """# Get list of all processed files
     if log_path is None:
         print(f'{bcolors.FAIL} Please provide log path {bcolors.ENDC}')
         exit(1)
     # proc_files = processed_list('logs/D29_04_20M17_37.txt')
     proc_files = processed_list(log_path)
     print(proc_files)
-    check_files(proc_files)
+    check_files(proc_files)"""
     # Process all the files that finished discourse parsing
     # third stage & four stage
     # Can be uncommented if running files separately - Stages 1+2 and then 3+4
@@ -163,30 +164,40 @@ def cluster_eval(topic_number=4, log_path=None):
     nucleus_path = os.path.join(parser.get('cluster_eval', 'evaluation_list'), os.path.join(str(topic_number), 'nucleus'))
     proc_files = evaluation_list(nucleus_path)
 
+    OTHER_SYSTEM = '/home/tzvi/PycharmProjects/HSdataprocessLinux/summarizerWS/summaries'
+
     create_clustering_corpus(parser.get('cluster_eval', 'original_data'),
                              parser.get('cluster_eval', 'cluster_folder'),
                              file_name='corpus.csv')
 
     cluster_folder_path = parser.get('cluster_eval', 'cluster_folder')
     print('Finished processing the data\nStarting to cluster....')
+    start_time = time.time()
     # Calculate clustering for the current <!-original-!> files
     print(f'{bcolors.WARNING}Clustering original files{bcolors.ENDC}')
     truth, original_M = run_kmeans(os.path.join(cluster_folder_path, 'corpus.csv'),
                                    os.path.join(cluster_folder_path, 'output_plots'),
                                    proc_files,
                                    'clustering_report.txt')
+    run_time = time.time() - start_time
+    print(f'{bcolors.OKBLUE} --- {run_time} seconds --- {bcolors.ENDC}')
 
     print(f'{bcolors.WARNING}Creating new corpus{bcolors.ENDC}')
     # Create new clustering corpus from the processed files
-    create_clustering_corpus(nucleus_path,
-                             cluster_folder_path)
+    create_clustering_corpus(OTHER_SYSTEM,
+                             cluster_folder_path,
+                             file_name='after_corpus.csv',
+                             customSystemTag='')
 
+    start_time = time.time()
     print(f'{bcolors.WARNING}Clustering for processed files{bcolors.ENDC}')
     # Calculate clustering for the current <!-processed-!> files
     predict, predict_M = run_kmeans(os.path.join(cluster_folder_path, 'after_corpus.csv'),
                                     os.path.join(cluster_folder_path, 'after_output_plots'),
                                     proc_files,
                                     'after_clustering_report.txt')
+    run_time = time.time() - start_time
+    print(f'{bcolors.OKBLUE} --- {run_time} seconds --- {bcolors.ENDC}')
 
     report = create_confusion_matrix(truth, predict)
 
@@ -194,8 +205,8 @@ def cluster_eval(topic_number=4, log_path=None):
         for key in report.keys():
             report_file.write('\n' + key + '\n' + str(report[key]))
 
-    report_df = pd.DataFrame([original_M, pred_M, report], index=['Texts', 'Summaries', 'report'])
+    report_df = pd.DataFrame([original_M, predict_M, report], index=['Texts', 'Summaries', 'report'])
     report_df.to_excel("eval_report.xlsx")
 
 
-# cluster_eval()
+# cluster_eval(topic_number=10)
