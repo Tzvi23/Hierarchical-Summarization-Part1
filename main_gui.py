@@ -21,7 +21,7 @@ def check_data_and_report(fileId, path):
     else:
         res = list()
         for file in found_files:
-            file = file[:-4]  # Remove .txt
+            file = file[:-4]  # Remove .txtf
             if 'strip' in file:
                 section = ' '.join(file[:file.index('strip') - 1].split('_')[1:])
             else:
@@ -84,8 +84,7 @@ third_stage_layout = [
         font=('Helvetica', 11), justification='center')],
     [sg.Frame(layout=[[sg.Checkbox('10 topics model', key='10', default=True),
                        sg.Checkbox('6 topics model', key='6', default=True),
-                       sg.Checkbox('4 topics model', key='4', default=True),
-                       sg.Checkbox('HDP model', key='hdp', default=False)]],
+                       sg.Checkbox('4 topics model', key='4', default=True)]],
               title='Pre-trained LDA models', relief=sg.RELIEF_SUNKEN, title_location=sg.TITLE_LOCATION_TOP)],
     [sg.Button('Process', key='process_button3'), sg.Button('Next Stage', key='nextStage_button3', visible=False)]
 ]
@@ -114,7 +113,7 @@ fifth_stage_layout = [
         'This stage collects all the data needed and parse it in json formats to create\n'
         'a local .html file to view the results in an interactive way.',
         font=('Helvetica', 11), justification='center')],
-    [sg.Text('Choose model'), sg.Combo(['10 topic model', '6 topic model', '4 topic model', 'HDP model'], default_value='10 topic model', key='topicChoice')],
+    [sg.Text('Choose model'), sg.Combo(['10 topic model', '6 topic model', '4 topic model'], default_value='10 topic model', key='topicChoice')],
     [sg.Button('Process', key='process_button5'), sg.Button('Show Case', key='show_case', visible=False)]
 ]
 # endregion
