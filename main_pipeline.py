@@ -78,7 +78,7 @@ This stage collects all the data needed and parse it in json formats and creates
 """
 
 
-def show_case(file_id, model_number):
+def show_case(file_id, model_number, topic_words=None):
     from show_case.show_case_functions import run_show_case
     show_case_url = run_show_case(file_id, model_number,
                                   original_text_dir=parser.get('main_pipeline', 'original_text_dir'),
@@ -86,13 +86,53 @@ def show_case(file_id, model_number):
                                   xml_parse_dir=parser.get('main_pipeline', 'xml_parse_dir'),
                                   topic_class_dir=parser.get('main_pipeline', 'topic_class_dir'),
                                   trees_dir=parser.get('main_pipeline', 'trees_dir'),
-                                  final_stage_dir=parser.get('main_pipeline', 'final_stage_dir')
+                                  final_stage_dir=parser.get('main_pipeline', 'final_stage_dir'),
+                                  topic_data=topic_words
                                   )
     return show_case_url
 
 
-# first_stage('data/28695.txt')
+# first_stage('data/25082.txt')
 # second_stage('2326.txt.xml')
 # third_stage(92, {'4': True, '6': False, '10': False, 'hdp': False})
 # fourth_stage(28080, '4')
 # show_case(28080, 4)
+
+def run_last_stages():
+    def convert_topics_for_show_case(modelNumber=10):
+        from final_stage import topic_labels
+        import json
+        topics = topic_labels[str(modelNumber)]
+        for topic in topics.keys():
+            topics[topic] = topics[topic].split('|')
+            topics[topic] = [w.strip() for w in topics[topic]]
+        return json.dumps(topics)
+
+    from summarizerWS import summarizer
+    import os
+
+    SUMMARY_FOLDER = '/home/tzvi/PycharmProjects/HSdataprocessLinux/summarizerWS/summaries'
+    proc_file = [file[:-4] for file in os.listdir(SUMMARY_FOLDER)]
+
+    topic_word_list = convert_topics_for_show_case()
+    DATA_PATH = '/home/tzvi/PycharmProjects/HSdataprocessLinux/data'
+    queue = [file[:-4] for file in os.listdir(DATA_PATH)]
+    # Run stages: fourth stage + show_case
+    for fileid in queue:
+        if fileid in proc_file:
+            continue
+        third_stage(file_id=int(fileid), models={'4': False, '6': False, '10': True, 'hdp': False})
+        fourth_stage(file_id=int(fileid), model_number='10')
+
+        summarizer.create_summary(int(fileid))
+        show_case(file_id=int(fileid), model_number=10, topic_words=topic_word_list)
+    print('END')
+
+# run_last_stages()
+
+# Temp stat code
+# from pathlib import Path
+# import os
+# d = Path('data')
+# for file in os.listdir(d):
+#     first_stage(str(d / file))

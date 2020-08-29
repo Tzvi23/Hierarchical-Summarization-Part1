@@ -112,7 +112,7 @@ def processed_list(log_file):
         for row in csv_reader:
             if row[1] not in file_list and (row[0] == 'end' or row[0] == 'proc'):
                 file_list.append(row[1])
-    return file_list
+    return list(set(file_list))
 
 
 # Define parser arguments
@@ -182,6 +182,10 @@ elif args.command == 'run_stages':
                     except FileNotFoundError:
                         print(f'{bcolors.FAIL}File not found!{bcolors.ENDC}')
                         exit(0)
+
+                with open('missing_queue.pickle', 'rb') as p:
+                    queue = pickle.load(p)
+                    queue = [file + '.txt' for file in queue]
                 # Start the process
                 for file in queue:
                     # Check if file been processed
@@ -195,7 +199,7 @@ elif args.command == 'run_stages':
                     # Second stage
                     mp.second_stage(file + '.xml',
                                     config['second_stage']['discourse_script_path'])
-
+                    """
                     # Third stage
                     argument_list = [
                         config['third_stage']['models'],
@@ -215,6 +219,7 @@ elif args.command == 'run_stages':
                                     os.mkdir('show_case_error')
                                 with open(os.path.join('show_case_error', file[:-4])) as error_file:
                                     error_file.write(str(e))
+                                    """
                     write_log(log_path, file, datetime.datetime.now().strftime("%d/%m/%y"), datetime.datetime.now().strftime("%H:%M"), 'end')
         else:
             raise FileExistsError('[--all-path] Check path: Exists? Is it a directory?')

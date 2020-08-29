@@ -51,7 +51,7 @@ def shorten_text2(cData, min_length, percentage, topic_number):
 
 def get_score(cData, text):
     index = [x for x, y in enumerate(cData) if y[1] == text]
-    return cData[index[0]][3]
+    return cData[index[0]][3] , cData[index[0]][5]
 
 # data = load_data('6101_governance_statement_strip_output.txt.pickle', 4)
 # data = shorten_text(data, 2, 0.5)

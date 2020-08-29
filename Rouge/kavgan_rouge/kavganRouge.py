@@ -3,7 +3,9 @@ from print_colors import bcolors
 from project_config import parser
 import os
 from shutil import copyfile
+from pathlib import Path
 
+kavgan_jar = '/home/tzvi/PycharmProjects/HSdataprocessLinux/Rouge/kavgan_rouge/rouge2-1.2.2.jar'  # Absolute path to the jar file
 """
 Using https://github.com/kavgan/ROUGE-2.0 java package to evaluate the summaries.
 Two folders need to be updated with results to work as an input to the evaluation process:
@@ -14,8 +16,9 @@ Output: results.csv file with the results.
 """
 
 def run_rouge_kavgan():
+    global kavgan_jar
     # ROUGE - 1
-    kavgan_jar = parser.get('rouge', 'abs_jar')
+    # kavgan_jar = parser.get('rouge', 'abs_jar')
     # kavgan_jar = '/home/tzvi/PycharmProjects/HSdataprocessLinux/Rouge/kavgan_rouge/rouge2-1.2.2.jar'  # Absolute path to the jar file
     subprocess.call(['java', '-jar', kavgan_jar])
 
@@ -45,3 +48,12 @@ def run_rouge_kavgan():
         txt = txt.replace('ngram=L', 'ngram=1').replace('RL', 'R1')
     with open('rouge.properties', 'w') as prop_file:
         prop_file.write(txt)
+
+
+def process_name_convention(add_name='NuVecRankTopic'):
+    SYSTEM_PATH = Path('/home/tzvi/PycharmProjects/HSdataprocessLinux/Rouge/kavgan_rouge/projects/test-summarization/system')
+    for file in os.listdir(SYSTEM_PATH):
+        os.rename(SYSTEM_PATH / file, SYSTEM_PATH / (file[:-4] + '_' + add_name + '.txt'))
+
+# process_name_convention()
+# run_rouge_kavgan()
